@@ -1,10 +1,11 @@
-
-function Footer(){
-    return(
-        <div className="flex flex-col items-center justify-center h-16 bg-primary text-primary-content">
-            <p>© 2021 - 2022</p>
-        </div>
-    )
+function Footer() {
+  return (
+    <footer className="footer footer-center p-4 bg-base-300 text-base-content">
+      <aside>
+        <p>Copyright © 2023 - All right reserved by ACME Industries Ltd</p>
+      </aside>
+    </footer>
+  );
 }
 
 export default Footer;
