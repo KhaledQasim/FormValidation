@@ -5,10 +5,3 @@ from fastapi import Header, HTTPException
 
 
 
-
-
-
-
-
-
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")

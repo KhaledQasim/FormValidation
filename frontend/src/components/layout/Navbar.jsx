@@ -2,7 +2,7 @@ import { effect } from "@preact/signals-react";
 import { themeChange } from "theme-change";
 
 effect(() => {
-  themeChange(false);
+  themeChange(true);
   // 👆 false parameter is required for react project
 }, []);
 

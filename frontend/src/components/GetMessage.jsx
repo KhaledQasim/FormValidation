@@ -7,7 +7,8 @@ const backend_url = import.meta.env.VITE_BACKEND_URL;
 const message = signal("Loading...");
 
 effect(()=>{
-    axios.get(backend_url)
+    console.log(backend_url+"hello");
+    axios.get(backend_url+"hello")
     .then((res) => {
         message.value = res.data.message;
     })
