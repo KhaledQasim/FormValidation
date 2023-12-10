@@ -62,17 +62,17 @@ async def create_user(db: db_dependancy,
     Args:
         db (db_dependancy): A dependancy that creates a new SQLAlchemy SessionLocal for a single request and then closes it once the request is finished.
         create_user (schemas.UserCreate): Takes in data based on schemas.UserCreate Pydantic model, in that model we can apply validation. 
+        
+    Returns:
+        201 (StatusCode): 201 Status code for successful creation of a new user
     """
     create_user_model = models.User(
         username=create_user.username,
         email=create_user.email,
         hashed_password=pwd_context.hash(create_user.password),
     )
+    crud.create_user(db, create_user_model)
 
-
-    db.add(create_user_model)
-    db.commit()
-    db.refresh(create_user_model)
     
 
 @router.post("/token", response_model=Token)
