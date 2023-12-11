@@ -3,6 +3,14 @@ import Footer from "./Footer";
 import { Outlet } from "react-router-dom";
 
 import { theme } from "../../helper/theme";
+import { effect } from "@preact/signals-react";
+
+effect(() => {
+  if (localStorage.getItem("theme") === null) {
+    localStorage.setItem("theme", "");
+  }
+  theme.value = localStorage.getItem("theme");
+});
 
 function Layout() {
   return (
