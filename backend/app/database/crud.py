@@ -1,11 +1,11 @@
 from sqlalchemy.orm import Session
 
 from . import models, schemas
-
+# All the sql database queries are resilient to sql injection attacks since  we are using an orm (sqlalchemy) to interact with the database
 
 def get_user_by_id(db: Session, user_id: int):
     return db.query(models.User).filter(models.User.id == user_id).first()
-
+    
 def get_user_by_username(db: Session, username: str):
     return db.query(models.User).filter(models.User.username == username).first()
 

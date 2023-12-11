@@ -79,3 +79,6 @@ async def root():
 
 
 
+@app.get("/user/{id}")
+async def getUser(id: int,id2: int):
+    return id + id2

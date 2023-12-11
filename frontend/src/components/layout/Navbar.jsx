@@ -1,10 +1,5 @@
-import { effect } from "@preact/signals-react";
-import { themeChange } from "theme-change";
+import { theme } from "../../helper/theme";
 
-effect(() => {
-  themeChange(true);
-  // 👆 false parameter is required for react project
-}, []);
 
 function Navbar() {
   return (
@@ -77,8 +72,10 @@ function Navbar() {
       </div>
       <div className="navbar-end">
         {/* this hidden checkbox controls the state */}
-        <button data-toggle-theme="dark,light">Change Theme</button>
-        <label className="swap swap-rotate">
+        
+        <button onClick={()=>theme.value="dark"} className="m-4">Dark</button>
+        <button onClick={()=>theme.value="light"} className="m-4">Light</button>
+        <label onClick={()=>theme.value="retro"} className="swap swap-rotate">
           <input type="checkbox" className="theme-controller" value="sun" />
 
           {/* sun icon */}

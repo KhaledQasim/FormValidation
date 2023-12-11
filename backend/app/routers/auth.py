@@ -17,17 +17,20 @@ router = APIRouter(
     prefix="/auth",
     tags=["auth"],
     # dependencies=[Depends(oauth2_scheme)],
- 
+
 )
 # creates all tables in database
 models.Base.metadata.create_all(bind=engine)
 # Dependency needed to be used in every file that needs to access the database, below when using "yield" it will create new SQLAlchemy SessionLocal for a single request and then close it once the request is finished.
+
+
 def get_db():
     db = SessionLocal()
     try:
         yield db
     finally:
         db.close()
+
 
 db_dependancy = Annotated[Session, Depends(get_db)]
 
@@ -43,6 +46,7 @@ class Token(BaseModel):
     access_token: str
     token_type: str
 
+
 class TokenData(BaseModel):
     username: str | None = None
 
@@ -52,31 +56,41 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_bearer_scheme = OAuth2PasswordBearer(tokenUrl="auth/token")
 
 
-
-
 @router.post("/", status_code=status.HTTP_201_CREATED)
 async def create_user(db: db_dependancy,
                       create_user: schemas.UserCreate):
     """Create a new user in the database
-    
+
     Args:
         db (db_dependancy): A dependancy that creates a new SQLAlchemy SessionLocal for a single request and then closes it once the request is finished.
         create_user (schemas.UserCreate): Takes in data based on schemas.UserCreate Pydantic model, in that model we can apply validation. 
-        
+
     Returns:
         201 (StatusCode): 201 Status code for successful creation of a new user
     """
-    create_user_model = models.User(
-        username=create_user.username,
-        email=create_user.email,
-        hashed_password=pwd_context.hash(create_user.password),
-    )
+    username = crud.get_user_by_username(db, create_user.username)
+    email = crud.get_user_by_email(db, create_user.email)
+    if username is not None:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Username already exists",
+        )
+    if email is not None:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Email already exists",
+        )
+    else:
+        create_user_model = models.User(
+            username=create_user.username,
+            email=create_user.email,
+            hashed_password=pwd_context.hash(create_user.password),
+        )
     crud.create_user(db, create_user_model)
 
-    
 
 @router.post("/token", response_model=Token)
-async def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm,Depends()],
+async def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
                                  db: db_dependancy):
     """Takes in a username and password from the user and checks if the user exists in the database 
     and if the password matches the hashed password in the database.
@@ -91,17 +105,15 @@ async def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm,
     Returns:
         Token (object): returns a token object with the access_token and token_type
     """
-    
-    
+
     user = authenticate_user(db, form_data.username, form_data.password)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect username or password",
         )
-    token = create_access_token(user.username,user.id,timedelta(minutes=30))
+    token = create_access_token(user.username, user.id, timedelta(minutes=30))
     return {"access_token": token, "token_type": "bearer"}
-
 
 
 def authenticate_user(db, username: str, password: str):
@@ -156,7 +168,7 @@ async def get_current_user_from_jwt(token: Annotated[str, Depends(oauth2_bearer_
         return {"username": username, "id": user_id}
     except JWTError:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
-                            detail="Could not validate user credentials",)    
+                            detail="Could not validate user credentials",)
 
 # def verify_password(plain_password, hashed_password):
 #     return pwd_context.verify(plain_password, hashed_password)
