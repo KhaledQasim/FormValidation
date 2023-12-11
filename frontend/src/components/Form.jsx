@@ -122,18 +122,7 @@ function Form() {
         </div>
 
         <br></br>
-
-          {/* Disabled Checkbox Input */}
-          <div className="form-control w-full items-center">
-            <label className="cursor-pointer label gap-2">
-              <span className="label-text">Disabled</span>
-              <input type="checkbox" checked="checked" className="checkbox checkbox-info" />
-            </label>
-          </div>
-
-          <br></br>
-          
-
+      
           <div className="flex flex-col items-center">
             <button name="submit" className="content-center btn btn-xs sm:btn-sm md:btn-md lg:btn-lg">Register</button>
           </div>
@@ -142,74 +131,102 @@ function Form() {
         </form>
       </div>
 
-        <br></br>
+      <br></br>
 
-        <div className="flex flex-col w-full items-center">
-          <div className="grid grid-cols-2 text-xs gap-y-0">
-            
-            <img src={tick} className="object-fill w-1/12 h-auto"></img>
-            <p className="text-success">Valid First Name</p>
+      <div className="flex flex-col">
+        <div className="flex flex-row gap-20 justify-center">
+          <div>
+            <div className="flex flex-row gap-2 pt-1">
+              <img src={tick} className="object w-4 h-auto"></img>
+              <p className="text-success text-xs font-bold">Valid First Name</p>       
+            </div>
 
-            <img src={tick} className="object-fill w-1/12 h-auto"></img>
-            <p className="text-success">Valid Last Name</p> 
+            <div className="flex flex-row gap-2 pt-1">
+              <img src={tick} className="object w-4 h-auto"></img>
+              <p className="text-success text-xs font-bold">Valid Last Name</p> 
+            </div>
 
-            <img src={tick} className="object-fill w-1/12 h-1/12"></img>
-            <p className="text-success">Valid Phone Number</p>
+            <div className="flex flex-row gap-2 pt-1">
+              <img src={tick} className="object w-4 h-auto"></img>
+              <p className="text-success text-xs font-bold">Valid Phone Number</p>
+            </div>
 
-            <img src={tick} className="object-fill w-1/12 h-1/12"></img>
-            <p className="text-success">Valid Date of Birth</p>
+            <div className="flex flex-row gap-2 pt-1">
+              <img src={tick} className="object w-4 h-auto"></img>
+              <p className="text-success text-xs font-bold">Valid Date of Birth</p>
+            </div>
 
-            <img src={tick} className="object-fill w-1/12 h-1/12"></img>
-            <p className="text-success">Valid Address</p>
+            <div className="flex flex-row gap-2 pt-1 ">
+              <img src={tick} className="object w-4 h-auto"></img>
+              <p className="text-success text-xs font-bold">Valid Address</p>
+            </div>
 
-            <img src={tick} className="object-fill w-1/12 h-1/12"></img>
-            <p className="text-success">Valid Postcode</p>
+            <div className="flex flex-row gap-2 pt-1">
+              <img src={tick} className="object w-4 h-auto"></img>
+              <p className="text-success text-xs font-bold">Valid Postcode</p>
+            </div>
 
-            <img src={tick} className="object-fill w-1/12 h-1/12"></img>
-            <p className="text-success">Valid Company</p>
+            <div className="flex flex-row gap-2 pt-1">
+              <img src={tick} className="object w-4 h-auto"></img>
+              <p className="text-success text-xs font-bold">Valid Company</p>
+            </div>
 
-            <img src={tick} className="object-fill w-1/12 h-1/12"></img>
-            <p className="text-success">Valid Nationality</p>
-
-            <img src={tick} className="object-fill w-1/12 h-1/12"></img>
-            <p className="text-success">Valid File</p>
-
-            <img src={xImage} className="object-fill w-1/12 h-auto"></img>
-            <p className="text-error">Invalid First Name</p>
-
-            <img src={xImage} className="object-fill w-1/12 h-auto"></img>
-            <p className="text-error ">Invalid Last Name</p> 
-
-            <img src={xImage} className="object-fill w-1/12 h-1/12"></img>
-            <p className="text-error">Invalid Phone Number</p>
-
-            <img src={xImage} className="object-fill w-1/12 h-1/12"></img>
-            <p className="text-error">Invalid Date of Birth</p>
-
-            <img src={xImage} className="object-fill w-1/12 h-1/12"></img>
-            <p className="text-error">Invalid Address</p>
-
-            <img src={xImage} className="object-fill w-1/12 h-1/12"></img>
-            <p className="text-error">Invalid Postcode</p>
-
-            <img src={xImage} className="object-fill w-1/12 h-1/12"></img>
-            <p className="text-error">Invalid Company</p>
-
-            <img src={xImage} className="object-fill w-1/12 h-1/12"></img>
-            <p className="text-error">Invalid Nationality</p>
-
-            <img src={xImage} className="object-fill w-1/12 h-1/12"></img>
-            <p className="text-error">Invalid File</p>
-
-          
-
-          
+            <div className="flex flex-row gap-2 pt-1">
+              <img src={tick} className="object w-4 h-auto"></img>
+              <p className="text-success text-xs font-bold">Valid File</p>
+            </div>
           </div>
-        </div>
-      
 
-        <br></br>
-        <br></br>
+      
+        <div>
+          <div className="flex flex-row gap-2 pt-1">
+            <img src={xImage} className="object w-4 h-auto"></img>
+            <p className="text-error text-xs font-bold">Invalid First Name</p>
+          </div>
+
+          <div className="flex flex-row gap-2 pt-1">
+            <img src={xImage} className="object w-4 h-auto"></img>
+            <p className="text-error text-xs font-bold">Invalid Last Name</p> 
+          </div>
+
+          <div className="flex flex-row gap-2 pt-1">
+            <img src={xImage} className="object w-4 h-auto"></img>
+            <p className="text-error text-xs font-bold">Invalid Phone Number</p>
+          </div>
+ 
+          <div className="flex flex-row gap-2 pt-1">
+            <img src={xImage} className="object w-4 h-auto"></img>
+            <p className="text-error text-xs font-bold">Invalid Date of Birth</p>
+          </div>
+
+          <div className="flex flex-row gap-2 pt-1">
+            <img src={xImage} className="object w-4 h-auto"></img>
+            <p className="text-error text-xs font-bold">Invalid Address</p>
+          </div>
+
+          <div className="flex flex-row gap-2 pt-1">
+            <img src={xImage} className="object w-4 h-auto"></img>
+            <p className="text-error text-xs font-bold">Invalid Postcode</p>
+          </div>
+
+          <div className="flex flex-row gap-2 pt-1">
+            <img src={xImage} className="object w-4 h-auto"></img>
+            <p className="text-error text-xs font-bold">Invalid Company</p>
+          </div>
+
+          <div className="flex flex-row gap-2 pt-1">
+            <img src={xImage} className="object w-4 h-auto"></img>
+            <p className="text-error text-xs font-bold">Invalid File</p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+
+
+      <br></br>
+      <br></br>
     </>
   );
 }
