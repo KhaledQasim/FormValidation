@@ -42,13 +42,13 @@ function Form() {
   const validateNumber = new RegExp("^(?:\\+?44|0)(?:\\s?\\d{4}|\\s\\d{3}\\s\\d{3}|\\s\\d{4}\\s\\d{4}|\\d{10})$"); // Uk Phone Number format
   const validateAddress = new RegExp("[A-Za-z0-9'\.\-\s\,]{1,100}$") //100 characters maximum, letters, numbers, and some special characters allowed. 
   const validatePostcode = new RegExp("[A-Za-z]{1,2}\\d[A-Za-z\\d]?\\s?\\d[A-Za-z]{2}") // UK Post Code Format
-  const validateCompany = new RegExp("^\\w[\\w.\\-#&\\s]{1,50}$", "i"); // 5 characters maximum. Letters and some special characters allowed. Case-insensitive.
+  const validateCompany = new RegExp("^\\w[\\w.\\-#&\\s]{1,50}$", "i"); // 50 characters maximum. Letters and some special characters allowed. Case-insensitive.
   const validateNationality = new RegExp("English|Scottish|Welsh|Northern Irish") // Selection must be one of the four options
 
   // Check DOB is between allowed range
   function validateDate(date) {
     
-    const min = new Date('1900-01-01');
+    const min = new Date('1910-01-01');
     const max = new Date('2010-01-01');
     const dob = Date.parse(date)
 
