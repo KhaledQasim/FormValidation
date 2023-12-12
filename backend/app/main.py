@@ -11,7 +11,8 @@ from .database import models
 from sqlalchemy.orm import Session
 
 from .routers import auth
-from .routers.auth import get_current_user_from_jwt
+from .routers.auth import get_current_user_from_jwt, get_current_user_from_jwt_cookie
+
 # Global dependincy
 # app = FastAPI(dependencies=[Depends(get_query_token)])
 
@@ -49,6 +50,7 @@ app.add_middleware(
 
 db_dependancy = Annotated[Session, Depends(get_db)]
 user_dependancy = Annotated[dict, Depends(get_current_user_from_jwt)]
+user_cookie_dependancy = Annotated[dict, Depends(get_current_user_from_jwt_cookie)]
 
 @app.get("/", status_code=status.HTTP_200_OK)
 async def user(user: user_dependancy, db : db_dependancy ):
@@ -72,6 +74,12 @@ async def user(user: user_dependancy, db : db_dependancy ):
     return {"User": user}
 
 
+@app.get("/cookie-jwt-validation",status_code=status.HTTP_200_OK)
+async def cookie(user: user_cookie_dependancy):
+    if user is None:
+        raise HTTPException(status_code=401, detail="Authentication failed")
+    return {"User": user}
+
 @app.get("/hello")
 async def root():
     return {"message" : "Hello World"}
@@ -82,3 +90,4 @@ async def root():
 @app.get("/user/{id}")
 async def getUser(id: int,id2: int):
     return id + id2
+

@@ -7,15 +7,15 @@ import Layout from "./components/layout/Layout.jsx";
 import NotFound from "./pages/NotFound.jsx";
 import Registration from "./pages/Registration.jsx";
 import Login from "./pages/Login.jsx";
+import { atom } from "jotai";
 
-
-
+export const loggedUser = atom(false);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Layout/>}>
+        <Route path="/" element={<Layout />}>
           <Route index element={<App />} />
           <Route path="/register" element={<Registration />} />
           <Route path="/login" element={<Login />} />

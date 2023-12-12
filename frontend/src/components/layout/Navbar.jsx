@@ -1,13 +1,16 @@
 import { Link, NavLink } from "react-router-dom";
 import { theme } from "../../helper/theme.jsx";
+import { useAtom } from "jotai";
+import { loggedUser } from "../../main.jsx";
 
-
-function setTheme(themeInput){
-    localStorage.setItem("theme", themeInput);
-    theme.value = themeInput;
+function setTheme(themeInput) {
+  localStorage.setItem("theme", themeInput);
+  theme.value = themeInput;
 }
 
 function Navbar() {
+  const [user] = useAtom(loggedUser);
+
   return (
     <div className="navbar bg-base-100">
       <div className="navbar-start">
@@ -55,12 +58,21 @@ function Navbar() {
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
-          <li>
-            <NavLink className="button" to="/login">Login</NavLink>
-          </li>
-          <li>
-            <NavLink to="/register">Register</NavLink>
-          </li>
+          {user ? (
+            <div>logged</div>
+          ) : (
+            <>
+              
+              <li>
+                <NavLink className="button" to="/login">
+                  Login
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/register">Register</NavLink>
+              </li>
+            </>
+          )}
         </ul>
       </div>
       <div className="navbar-end">
@@ -72,7 +84,7 @@ function Navbar() {
         <button onClick={() => setTheme("light")} className="m-4">
           Light
         </button>
-        <button onClick={()=> setTheme("retro")}>
+        <button onClick={() => setTheme("retro")}>
           <svg
             width="65"
             height="65"

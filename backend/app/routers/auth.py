@@ -5,11 +5,13 @@ from ..database import models, schemas, crud
 from ..database.database import SessionLocal, engine
 
 
-from fastapi import Depends, APIRouter, HTTPException, status
+from fastapi import Depends, APIRouter, HTTPException, status, Cookie, Response, FastAPI
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from passlib.context import CryptContext
-from jose import JWTError, jwt
+from jose import JWTError
+from jose import jwt as JWT
 from sqlalchemy.orm import Session
 
 # Declare URI routes of this file
@@ -56,7 +58,7 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_bearer_scheme = OAuth2PasswordBearer(tokenUrl="auth/token")
 
 
-@router.post("/", status_code=status.HTTP_201_CREATED)
+@router.post("/")
 async def create_user(db: db_dependancy,
                       create_user: schemas.UserCreate):
     """Create a new user in the database
@@ -68,6 +70,7 @@ async def create_user(db: db_dependancy,
     Returns:
         201 (StatusCode): 201 Status code for successful creation of a new user
     """
+    
     username = crud.get_user_by_username(db, create_user.username)
     email = crud.get_user_by_email(db, create_user.email)
     if username is not None:
@@ -88,8 +91,21 @@ async def create_user(db: db_dependancy,
         )
     crud.create_user(db, create_user_model)
 
+    # user = authenticate_user(db, create_user.username, create_user.password)
+    # token = create_access_token(user.username, user.id, timedelta(minutes=30))
+    content = {"message": "User created successfully"}
+    # content = {"access_token": token, "token_type": "bearer"}    
+    response = JSONResponse(content=content)
+    # response.set_cookie(key="jwt", value=token,httponly=True,samesite="strict",secure=True)
+    return response
+  
+        
+        
+   
 
-@router.post("/token", response_model=Token)
+
+# @router.post("/token", response_model=Token)
+@router.post("/token")
 async def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
                                  db: db_dependancy):
     """Takes in a username and password from the user and checks if the user exists in the database 
@@ -112,8 +128,17 @@ async def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm,
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect username or password",
         )
+        
+        
     token = create_access_token(user.username, user.id, timedelta(minutes=30))
-    return {"access_token": token, "token_type": "bearer"}
+    content = {"message": "User is valid, token created successfully"}
+    response = JSONResponse(content=content)
+    response.set_cookie(key="jwt", value=token,httponly=True,samesite="strict",secure=True)
+    return response
+    
+    # return {"access_token": token, "token_type": "bearer"}
+
+
 
 
 def authenticate_user(db, username: str, password: str):
@@ -128,12 +153,21 @@ def authenticate_user(db, username: str, password: str):
     Returns:
         user (str of user in database): if the user is found and the password matches then the user is returned else False is returned
     """
+    email = crud.get_user_by_email(db, username)
     user = crud.get_user_by_username(db, username)
-    if not user:
+   
+    if not email and not user:
         return False
-    if not pwd_context.verify(password, user.hashed_password):
-        return False
-    return user
+    elif email:
+        if not pwd_context.verify(password, email.hashed_password):
+            return False
+        return email
+    elif user:
+        if not pwd_context.verify(password, user.hashed_password):
+            return False
+        return user
+    
+   
 
 
 def create_access_token(username: str, user_id: int, expires_delta: timedelta | None = None):
@@ -153,13 +187,13 @@ def create_access_token(username: str, user_id: int, expires_delta: timedelta | 
                  "id": user_id}
     # Below line could be used to add more data to the token
     # to_encode.update({"exp": datetime.utcnow() + expires_delta})
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    encoded_jwt = JWT.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
 
 async def get_current_user_from_jwt(token: Annotated[str, Depends(oauth2_bearer_scheme)]):
     try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        payload = JWT.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         username: str = payload.get("sub")
         user_id: int = payload.get("id")
         if username is None or user_id is None:
@@ -169,6 +203,22 @@ async def get_current_user_from_jwt(token: Annotated[str, Depends(oauth2_bearer_
     except JWTError:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                             detail="Could not validate user credentials",)
+        
+        
+async def get_current_user_from_jwt_cookie(jwt: str = Cookie(None)):
+    try:
+        payload = JWT.decode(jwt, SECRET_KEY, algorithms=[ALGORITHM])
+        username: str = payload.get("sub")
+        user_id: int = payload.get("id")
+        if username is None or user_id is None:
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                                detail="Could not validate user credentials",)
+        return {"username": username, "id": user_id}
+    except JWTError:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                            detail="Could not validate user credentials",)
+    # print (jwt)
+    # return  {"cookie_value": jwt}
 
 # def verify_password(plain_password, hashed_password):
 #     return pwd_context.verify(plain_password, hashed_password)
