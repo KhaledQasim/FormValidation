@@ -1,7 +1,8 @@
-import { Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { theme } from "../../helper/theme.jsx";
-import { useAtom } from "jotai";
-import { loggedUser } from "../../main.jsx";
+
+
+import { logged , userData } from "../../helper/logged.jsx";
 
 function setTheme(themeInput) {
   localStorage.setItem("theme", themeInput);
@@ -9,7 +10,7 @@ function setTheme(themeInput) {
 }
 
 function Navbar() {
-  const [user] = useAtom(loggedUser);
+  // const [user] = useAtom(loggedUser);
 
   return (
     <div className="navbar bg-base-100">
@@ -58,8 +59,8 @@ function Navbar() {
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
-          {user ? (
-            <div>logged</div>
+          {logged.value ? (
+            <div>Welcome {userData.value.username}</div>
           ) : (
             <>
               

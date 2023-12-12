@@ -1,21 +1,20 @@
-import { signal , effect } from "@preact/signals-react";
+import { signal, effect } from "@preact/signals-react";
 import axios from "axios";
 import qs from "qs";
 import { useNavigate } from "react-router-dom";
-import { LoggedUser } from "../helper/LoggedUser";
+// import { LoggedUser } from "../helper/LoggedUser";
 import { useAtom } from "jotai";
 import { loggedUser } from "../main";
+
+import { logged } from "../helper/logged";
 
 const username = signal("");
 const password = signal("");
 const backend_url = import.meta.env.VITE_BACKEND_URL;
 
-
-
 function Login() {
   const [user, setUser] = useAtom(loggedUser);
 
- 
   function submit(e) {
     e.preventDefault();
     const form = {
@@ -33,8 +32,8 @@ function Login() {
       .then((res) => {
         if (res.status === 200) {
           console.log("user logged in");
-         
-          setUser(true);
+          logged.value = true;
+          //   setUser(true);
           navigate("/");
         }
       })
