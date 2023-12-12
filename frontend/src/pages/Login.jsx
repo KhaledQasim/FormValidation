@@ -1,20 +1,17 @@
-import { signal, effect } from "@preact/signals-react";
+import { signal } from "@preact/signals-react";
 import axios from "axios";
 import qs from "qs";
 import { useNavigate } from "react-router-dom";
 // import { LoggedUser } from "../helper/LoggedUser";
-import { useAtom } from "jotai";
-import { loggedUser } from "../main";
+import { logged , userData , userUpdate} from "../helper/logged";
 
-import { logged } from "../helper/logged";
 
 const username = signal("");
 const password = signal("");
 const backend_url = import.meta.env.VITE_BACKEND_URL;
 
 function Login() {
-  const [user, setUser] = useAtom(loggedUser);
-
+ 
   function submit(e) {
     e.preventDefault();
     const form = {
@@ -32,7 +29,10 @@ function Login() {
       .then((res) => {
         if (res.status === 200) {
           console.log("user logged in");
-          logged.value = true;
+
+        //   console.log(userData.value);
+        //   logged.value = true;
+          userUpdate();
           //   setUser(true);
           navigate("/");
         }
@@ -58,12 +58,7 @@ function Login() {
           className="input input-bordered input-primary w-full max-w-xs"
         />
         <div className="label grid grid-cols-1">
-          <span className="label-text-alt ">
-            Must be between 3-13 characters long
-          </span>
-          <span className="label-text-alt ">
-            Must be of the following characters: a-z, A-Z, 0-9
-          </span>
+        
         </div>
       </label>
 
@@ -78,21 +73,7 @@ function Login() {
           }}
         />
         <div className="label grid grid-cols-1">
-          <span className="label-text-alt ">
-            Must contain at least 1 lower case letter
-          </span>
-          <span className="label-text-alt ">
-            Must contain at least 1 Upper case letter
-          </span>
-          <span className="label-text-alt ">
-            Must contain at least 1 special character of !?%&*
-          </span>
-          <span className="label-text-alt ">
-            Must contain at least 1 digit 0-9
-          </span>
-          <span className="label-text-alt ">
-            Must be between 8-22 characters long
-          </span>
+          
         </div>
       </label>
       <button type="submit" className="btn btn-primary">

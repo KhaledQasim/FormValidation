@@ -13,7 +13,7 @@ function Form() {
           
           {/* First Name Input */}
           <div className="flex flex-col items-center gap-2 py-2"> 
-            <label for="firstName">First Name</label> 
+            <label htmlFor="firstName">First Name</label> 
             <input 
             type="text" 
             name="firstName" 
@@ -25,7 +25,7 @@ function Form() {
 
           {/* Last Name Input */}
           <div className="flex flex-col items-center gap-2 py-2">
-            <label for="lastName">Last Name</label> 
+            <label htmlFor="lastName">Last Name</label> 
             <input 
             type="text" 
             name="lastName"
@@ -37,7 +37,7 @@ function Form() {
                   
           {/* UK Phone Number Input */}
           <div className="flex flex-col items-center gap-2 py-2">
-            <label for="phoneNumber">Phone Number</label>
+            <label htmlFor="phoneNumber">Phone Number</label>
             <input 
             type="text" 
             name="phoneNumber"
@@ -49,7 +49,7 @@ function Form() {
 
           {/* Date of Birth Input */}
           <div className="flex flex-col items-center gap-2 py-2">
-            <label for="dob">Date of Birth</label>
+            <label htmlFor="dob">Date of Birth</label>
             <input 
             type="date" 
             name="dob"
@@ -62,7 +62,7 @@ function Form() {
 
           {/* UK Address Input */}
           <div className="flex flex-col items-center gap-2 py-2">
-            <label for="address">Address</label>
+            <label htmlFor="address">Address</label>
             <input 
             type="text"
             name="address" 
@@ -74,7 +74,7 @@ function Form() {
 
           {/* UK Post Code Input */}
           <div className="flex flex-col items-center gap-2 py-2">
-            <label for="postCode">Post Code</label>
+            <label htmlFor="postCode">Post Code</label>
             <input 
             type="text" 
             name="postCode"
@@ -86,7 +86,7 @@ function Form() {
 
           {/* Company Input */}
           <div className="flex flex-col items-center gap-2 py-2">
-            <label for="company">Company</label>
+            <label htmlFor="company">Company</label>
             <input 
             type="text" 
             name="company" 
@@ -98,7 +98,7 @@ function Form() {
 
           {/* UK Nationality Input */}
           <div className="flex flex-col items-center gap-2 py-2">
-            <label for="nationality">Nationality</label>
+            <label htmlFor="nationality">Nationality</label>
             <select name="nationality" className="select select-info w-full max-w-xs">
               <option disabled selected>Select Nationality</option>
               <option>English</option>
@@ -111,7 +111,7 @@ function Form() {
 
           {/* JSON File Input */}
           <div className="flex flex-col items-center gap-2 py-2">
-            <label for="nationality">Medical Record JSON</label>
+            <label htmlFor="nationality">Medical Record JSON</label>
             <input 
             type="file" 
             name="json-file"
