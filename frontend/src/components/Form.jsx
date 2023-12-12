@@ -1,8 +1,149 @@
 import xImage from "../assets/red-x-icon.svg";
 import tick from "../assets/green-tick.svg";
+import { useState } from "react";
 
 function Form() {
 
+  //Form Values
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [dob, setDob] = useState('');
+  const [address, setAddress] = useState('');
+  const [postcode, setPostcode] = useState('');
+  const [company, setCompany] = useState('');
+  const [nationality, setNationality] = useState('');
+  const [jsonFile, setJsonFile] = useState('');
+
+  //Valid Text Divs - Off by default
+  const [validFirstName, setValidFirstName] = useState(false);
+  const [validLastName, setValidLastName] = useState(false);
+  const [validPhoneNumber, setValidPhoneNumber] = useState(false);
+  const [validDob, setValidDob] = useState(false);
+  const [validAddress, setValidAddress] = useState(false);
+  const [validPostcode, setValidPostcode] = useState(false);
+  const [validCompany, setValidCompany] = useState(false);
+  const [validNationality, setValidNationality] = useState(false);
+  const [validJsonFile, setValidJsonFile] = useState(false);
+
+  //Invalid Text Divs - On by Default
+  const [invalidFirstName, setInvalidFirstName] = useState(true);
+  const [invalidLastName, setInvalidLastName] = useState(true);
+  const [invalidPhoneNumber, setInvalidPhoneNumber] = useState(true);
+  const [invalidDob, setInvalidDob] = useState(true);
+  const [invalidAddress, setInvalidAddress] = useState(true);
+  const [invalidPostcode, setInvalidPostcode] = useState(true);
+  const [invalidCompany, setInvalidCompany] = useState(true);
+  const [invalidNationality, setInvalidNationality] = useState(true);
+  const [invalidJsonFile, setInvalidJsonFile] = useState(true);
+
+  //Regex/Tests
+  const validateName = new RegExp("^[a-z ,.'\\-]{1,20}$", "i"); // 20 characters maximum. Letters and some special characters allowed. Case-insensitive.
+  const validateNumber = new RegExp("^(?:\\+?44|0)(?:\\s?\\d{4}|\\s\\d{3}\\s\\d{3}|\\s\\d{4}\\s\\d{4}|\\d{10})$"); // Uk Phone Number format
+  const validateAddress = new RegExp("[A-Za-z0-9'\.\-\s\,]{1,100}$") //100 characters maximum, letters, numbers, and some special characters allowed. 
+  const validatePostcode = new RegExp("[A-Za-z]{1,2}\\d[A-Za-z\\d]?\\s?\\d[A-Za-z]{2}") // UK Post Code Format
+  const validateCompany = new RegExp("^\\w[\\w.\\-#&\\s]{1,50}$", "i"); // 5 characters maximum. Letters and some special characters allowed. Case-insensitive.
+  const validateNationality = new RegExp("English|Scottish|Welsh|Northern Irish") // Selection must be one of the four options
+
+  // Check DOB is between allowed range
+  function validateDate(date) {
+    
+    const min = new Date('1900-01-01');
+    const max = new Date('2010-01-01');
+    const dob = Date.parse(date)
+
+    if (min < dob && dob < max) {
+      return true
+    } 
+  }
+
+  // Check file is a .json
+  function validateJson(filePath) {
+    const fileExtension = filePath.split(".").pop()
+
+    if (fileExtension === "json") {
+      return true
+    }
+  }
+
+  // Run tests & Update Valid/Invald text onclick
+
+  function validate() {
+    
+    if (validateName.test(firstName)) {
+      setValidFirstName(true)
+      setInvalidFirstName(false)
+    } else {
+      setValidFirstName(false)
+      setInvalidFirstName(true)
+    }
+
+    if (validateName.test(lastName)) {
+      setValidLastName(true)
+      setInvalidLastName(false)
+    } else {
+      setValidLastName(false)
+      setInvalidLastName(true)
+    }
+
+    if (validateNumber.test(phoneNumber)) {
+      setValidPhoneNumber(true)
+      setInvalidPhoneNumber(false)
+    } else {
+      setValidPhoneNumber(false)
+      setInvalidPhoneNumber(true)
+    }
+    
+    if(validateDate(dob)) {
+      setValidDob(true)
+      setInvalidDob(false)
+    } else {
+      setValidDob(false)
+      setInvalidDob(true)
+    }
+
+    if(validateAddress.test(address)) {
+      setValidAddress(true)
+      setInvalidAddress(false)
+    } else {
+      setValidAddress(false)
+      setInvalidAddress(true)
+    }
+
+    if(validatePostcode.test(postcode)) {
+      setValidPostcode(true)
+      setInvalidPostcode(false)
+    } else {
+      setValidPostcode(false)
+      setInvalidPostcode(true)
+    }
+
+    if (validateCompany.test(company)) {
+      setValidCompany(true)
+      setInvalidCompany(false)
+    } else {
+      setValidCompany(false)
+      setInvalidCompany(true)
+    }
+
+    if (validateNationality.test(nationality)) {
+      setValidNationality(true)
+      setInvalidNationality(false)
+    } else {
+      setValidNationality(false)
+      setInvalidNationality(true)
+    }
+
+    if (validateJson(jsonFile)) {
+      setValidJsonFile(true)
+      setInvalidJsonFile(false)
+    } else {
+      setValidJsonFile(false)
+      setInvalidJsonFile(true)
+    }
+
+  }
+  
   return (
     <>
       <h1 className="p-5 font-bold w-full text-center"> Please Register Below </h1>
@@ -18,8 +159,10 @@ function Form() {
             type="text" 
             name="firstName" 
             required
-            pattern="/^(?=.{1,40}$)[a-zA-Z]+(?:[-'\s][a-zA-Z]+)*$" // First name Regex
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
             className="input input-bordered input-info w-full max-w-xs" 
+            onClick={validate}
             />
           </div>
 
@@ -30,8 +173,10 @@ function Form() {
             type="text" 
             name="lastName"
             required
-            pattern="/^[a-z ,.'-]+$/i" // Last name Regex
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
             className="input input-bordered input-info w-full max-w-xs " 
+            onClick={validate}
             />
           </div>
                   
@@ -42,8 +187,10 @@ function Form() {
             type="text" 
             name="phoneNumber"
             required
-            pattern="^(((\+44\s?\d{4}|\(?0\d{4}\)?)\s?\d{3}\s?\d{3})|((\+44\s?\d{3}|\(?0\d{3}\)?)\s?\d{3}\s?\d{4})|((\+44\s?\d{2}|\(?0\d{2}\)?)\s?\d{4}\s?\d{4}))(\s?\#(\d{4}|\d{3}))?$"
+            value={phoneNumber}
+            onChange={(e) => setPhoneNumber(e.target.value)}
             className="input input-bordered input-info w-full max-w-xs" 
+            onClick={validate}
             />
           </div>
 
@@ -56,7 +203,10 @@ function Form() {
             min={"01/01/1900"}
             max={"01/01/2010"} 
             required
+            value={dob}
+            onChange={(e) => setDob(e.target.value)}
             className="input input-bordered input-info w-full max-w-xs" 
+            onClick={validate}
             />
           </div>
 
@@ -67,8 +217,10 @@ function Form() {
             type="text"
             name="address" 
             required
-            pattern="[A-Za-z0-9'\.\-\s\,]{1,100}$" // Max 100 Characters, only certain special symbols allowed.
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
             className="input input-bordered input-info w-full max-w-xs" 
+            onClick={validate}
             />
           </div>
 
@@ -79,8 +231,10 @@ function Form() {
             type="text" 
             name="postCode"
             required
-            pattern="([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9][A-Za-z]?))))\s?[0-9][A-Za-z]{2})" 
+            value={postcode}
+            onChange={(e) => setPostcode(e.target.value)}
             className="input input-bordered input-info w-full max-w-xs" 
+            onClick={validate}
             />
             </div>
 
@@ -91,16 +245,18 @@ function Form() {
             type="text" 
             name="company" 
             required
-            pattern="^[A-Z]([a-zA-Z0-9]|[- @\.#&!])*$"
+            value={company}
+            onChange={(e) => setCompany(e.target.value)}
             className="input input-bordered input-info w-full max-w-xs" 
+            onClick={validate}
             />
             </div>
 
           {/* UK Nationality Input */}
           <div className="flex flex-col items-center gap-2 py-2">
             <label htmlFor="nationality">Nationality</label>
-            <select name="nationality" className="select select-info w-full max-w-xs">
-              <option disabled selected>Select Nationality</option>
+            <select value={nationality} onChange={(e) => setNationality(e.target.value)} name="nationality" className="select select-info w-full max-w-xs onClick={validate}">
+              <option selected>Select Nationality</option>
               <option>English</option>
               <option>Scottish</option>
               <option>Welsh</option>
@@ -114,9 +270,12 @@ function Form() {
             <label htmlFor="nationality">Medical Record JSON</label>
             <input 
             type="file" 
-            name="json-file"
+            name="jsonFile"
             required
+            value={jsonFile}
+            onChange={(e) => setJsonFile(e.target.value)}
             className="file-input file-input-bordered file-input-info w-full max-w-xs" 
+            onClick={validate}
             />
           </div>
         </div>
@@ -124,7 +283,7 @@ function Form() {
         <br></br>
       
           <div className="flex flex-col items-center">
-            <button name="submit" className="content-center btn btn-xs sm:btn-sm md:btn-md lg:btn-lg">Register</button>
+            <button onClick={validate} name="submit" className="content-center btn btn-xs sm:btn-sm md:btn-md lg:btn-lg">Submit</button>
           </div>
 
           
@@ -136,88 +295,101 @@ function Form() {
       <div className="flex flex-col">
         <div className="flex flex-row gap-20 justify-center">
           <div>
-            <div className="flex flex-row gap-2 pt-1">
+
+          {validFirstName &&  <div className="flex flex-row gap-2 pt-1">
               <img src={tick} className="object w-4 h-auto"></img>
               <p className="text-success text-xs font-bold">Valid First Name</p>       
-            </div>
+            </div> }
 
-            <div className="flex flex-row gap-2 pt-1">
+            {validLastName &&  <div className="flex flex-row gap-2 pt-1">
               <img src={tick} className="object w-4 h-auto"></img>
               <p className="text-success text-xs font-bold">Valid Last Name</p> 
-            </div>
+            </div> }
 
-            <div className="flex flex-row gap-2 pt-1">
+            {validPhoneNumber &&  <div className="flex flex-row gap-2 pt-1">
               <img src={tick} className="object w-4 h-auto"></img>
               <p className="text-success text-xs font-bold">Valid Phone Number</p>
-            </div>
+            </div> }
 
-            <div className="flex flex-row gap-2 pt-1">
+            {validDob && <div className="flex flex-row gap-2 pt-1">
               <img src={tick} className="object w-4 h-auto"></img>
               <p className="text-success text-xs font-bold">Valid Date of Birth</p>
-            </div>
+            </div> }
 
-            <div className="flex flex-row gap-2 pt-1 ">
+            {validAddress && <div className="flex flex-row gap-2 pt-1 ">
               <img src={tick} className="object w-4 h-auto"></img>
               <p className="text-success text-xs font-bold">Valid Address</p>
-            </div>
+            </div> }
 
-            <div className="flex flex-row gap-2 pt-1">
+            {validPostcode && <div className="flex flex-row gap-2 pt-1">
               <img src={tick} className="object w-4 h-auto"></img>
               <p className="text-success text-xs font-bold">Valid Postcode</p>
-            </div>
+            </div> }
 
-            <div className="flex flex-row gap-2 pt-1">
+            {validCompany && <div className="flex flex-row gap-2 pt-1">
               <img src={tick} className="object w-4 h-auto"></img>
               <p className="text-success text-xs font-bold">Valid Company</p>
-            </div>
+            </div>}
 
-            <div className="flex flex-row gap-2 pt-1">
+            {validNationality && <div className="flex flex-row gap-2 pt-1">
+              <img src={tick} className="object w-4 h-auto"></img>
+              <p className="text-success text-xs font-bold">Valid Nationality</p>
+            </div>}
+
+            {validJsonFile && <div className="flex flex-row gap-2 pt-1">
               <img src={tick} className="object w-4 h-auto"></img>
               <p className="text-success text-xs font-bold">Valid File</p>
-            </div>
+            </div>}
+
           </div>
 
       
         <div>
-          <div className="flex flex-row gap-2 pt-1">
+
+          {invalidFirstName && <div className="flex flex-row gap-2 pt-1">
             <img src={xImage} className="object w-4 h-auto"></img>
             <p className="text-error text-xs font-bold">Invalid First Name</p>
-          </div>
+          </div> }
 
-          <div className="flex flex-row gap-2 pt-1">
+          {invalidLastName && <div className="flex flex-row gap-2 pt-1">
             <img src={xImage} className="object w-4 h-auto"></img>
             <p className="text-error text-xs font-bold">Invalid Last Name</p> 
-          </div>
+          </div>}
 
-          <div className="flex flex-row gap-2 pt-1">
+          {invalidPhoneNumber && <div className="flex flex-row gap-2 pt-1">
             <img src={xImage} className="object w-4 h-auto"></img>
             <p className="text-error text-xs font-bold">Invalid Phone Number</p>
-          </div>
+          </div>}
  
-          <div className="flex flex-row gap-2 pt-1">
+          {invalidDob && <div className="flex flex-row gap-2 pt-1">
             <img src={xImage} className="object w-4 h-auto"></img>
             <p className="text-error text-xs font-bold">Invalid Date of Birth</p>
-          </div>
+          </div>}
 
-          <div className="flex flex-row gap-2 pt-1">
+          {invalidAddress && <div className="flex flex-row gap-2 pt-1">
             <img src={xImage} className="object w-4 h-auto"></img>
             <p className="text-error text-xs font-bold">Invalid Address</p>
-          </div>
+          </div>}
 
-          <div className="flex flex-row gap-2 pt-1">
+          {invalidPostcode && <div className="flex flex-row gap-2 pt-1">
             <img src={xImage} className="object w-4 h-auto"></img>
             <p className="text-error text-xs font-bold">Invalid Postcode</p>
-          </div>
+          </div>}
 
-          <div className="flex flex-row gap-2 pt-1">
+          {invalidCompany && <div className="flex flex-row gap-2 pt-1">
             <img src={xImage} className="object w-4 h-auto"></img>
             <p className="text-error text-xs font-bold">Invalid Company</p>
-          </div>
+          </div>}
 
-          <div className="flex flex-row gap-2 pt-1">
+          {invalidNationality && <div className="flex flex-row gap-2 pt-1">
+            <img src={xImage} className="object w-4 h-auto"></img>
+            <p className="text-error text-xs font-bold">Invalid Nationality</p>
+          </div>}
+
+          {invalidJsonFile && <div className="flex flex-row gap-2 pt-1">
             <img src={xImage} className="object w-4 h-auto"></img>
             <p className="text-error text-xs font-bold">Invalid File</p>
-          </div>
+          </div>}
 
         </div>
       </div>
