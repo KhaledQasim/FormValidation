@@ -144,6 +144,7 @@ function Form() {
 
   }
   
+  //HTML FORM
   return (
     <>
       <h1 className="p-5 font-bold w-full text-center"> Please Register Below </h1>
@@ -294,6 +295,8 @@ function Form() {
 
       <div className="flex flex-col">
         <div className="flex flex-row gap-20 justify-center">
+          
+          {/* VALID TEXT OBJECTS */}
           <div>
 
           {validFirstName &&  <div className="flex flex-row gap-2 pt-1">
@@ -343,7 +346,7 @@ function Form() {
 
           </div>
 
-      
+        {/* INVALID TEXT OBJECTS */}
         <div>
 
           {invalidFirstName && <div className="flex flex-row gap-2 pt-1">
