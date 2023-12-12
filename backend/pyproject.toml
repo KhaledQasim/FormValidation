@@ -27,3 +27,11 @@ build-backend = "poetry.core.masonry.api"
 [virtualenvs]
 in-project = true
 path = ".venv"
+
+
+[tool.pytest.ini_options]
+filterwarnings = [
+  
+    # note the use of single quote below to denote "raw" strings in TOML
+    'ignore:Setting per-request cookies=<...>',
+]

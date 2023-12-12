@@ -43,5 +43,5 @@ class User(UserBase):
     form: list[Form] = []
     class ConfigDict:
         # orm_mode is now deprecated in favor of from_attributes
-        # orm_mode = True
-        from_attributes = True
+        orm_mode = True
+        # from_attributes = True
