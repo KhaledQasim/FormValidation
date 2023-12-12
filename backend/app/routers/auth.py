@@ -5,7 +5,7 @@ from ..database import models, schemas, crud
 from ..database.database import SessionLocal, engine
 
 
-from fastapi import Depends, APIRouter, HTTPException, status, Cookie, Response, FastAPI
+from fastapi import Depends, APIRouter, HTTPException, status, Cookie
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
@@ -21,8 +21,7 @@ router = APIRouter(
     # dependencies=[Depends(oauth2_scheme)],
 
 )
-# creates all tables in database
-models.Base.metadata.create_all(bind=engine)
+
 # Dependency needed to be used in every file that needs to access the database, below when using "yield" it will create new SQLAlchemy SessionLocal for a single request and then close it once the request is finished.
 
 
@@ -40,7 +39,7 @@ db_dependancy = Annotated[Session, Depends(get_db)]
 # JWT Config
 SECRET_KEY = "2241dd92e1054a55240b17076b1e8db94ab854fb4bcc98cd04eeeef0b7b52d9a"
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+ACCESS_TOKEN_EXPIRE_MINUTES = 180
 
 
 # Pydantic model for token api response
@@ -204,7 +203,7 @@ async def get_current_user_from_jwt(token: Annotated[str, Depends(oauth2_bearer_
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                             detail="Could not validate user credentials",)
         
-        
+
 async def get_current_user_from_jwt_cookie(jwt: str = Cookie(None)):
     try:
         if not jwt:

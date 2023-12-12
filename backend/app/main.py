@@ -10,7 +10,7 @@ from .database import models
 
 from sqlalchemy.orm import Session
 
-from .routers import auth
+from .routers import auth , form
 from .routers.auth import get_current_user_from_jwt, get_current_user_from_jwt_cookie
 
 # Global dependincy
@@ -18,6 +18,7 @@ from .routers.auth import get_current_user_from_jwt, get_current_user_from_jwt_c
 
 app = FastAPI()
 app.include_router(auth.router)
+app.include_router(form.router)
 # app.include_router(test_database.router)
 
 models.Base.metadata.create_all(bind=engine)
@@ -52,26 +53,26 @@ db_dependancy = Annotated[Session, Depends(get_db)]
 user_dependancy = Annotated[dict, Depends(get_current_user_from_jwt)]
 user_cookie_dependancy = Annotated[dict, Depends(get_current_user_from_jwt_cookie)]
 
-@app.get("/", status_code=status.HTTP_200_OK)
-async def user(user: user_dependancy, db : db_dependancy ):
-    """Takes in a users JWT token from the header (user: user_dependancy) 
-    then passes it to the dependancy get_current_user_from_jwt to be decoded and verified. 
-    If the token is valid then it will return the user object.
-    Then this function will return the user object as a response.
+# @app.get("/", status_code=status.HTTP_200_OK)
+# async def user(user: user_dependancy, db : db_dependancy ):
+#     """Takes in a users JWT token from the header (user: user_dependancy) 
+#     then passes it to the dependancy get_current_user_from_jwt to be decoded and verified. 
+#     If the token is valid then it will return the user object.
+#     Then this function will return the user object as a response.
 
-    Args:
-        user (user_dependancy): depends on the get_current_user_from_jwt function in file routers.auth.py to return a user object or Exception
-        db (db_dependancy): database dependancy to be used in this function to access the database
+#     Args:
+#         user (user_dependancy): depends on the get_current_user_from_jwt function in file routers.auth.py to return a user object or Exception
+#         db (db_dependancy): database dependancy to be used in this function to access the database
 
-    Raises:
-        HTTPException: if the user object is None then the user is not authenticated then an error is raised
+#     Raises:
+#         HTTPException: if the user object is None then the user is not authenticated then an error is raised
 
-    Returns:
-        user (dict): returns a user object with current username
-    """
-    if user is None:
-        raise HTTPException(status_code=401, detail="Authentication failed")
-    return {"User": user}
+#     Returns:
+#         user (dict): returns a user object with current username
+#     """
+#     if user is None:
+#         raise HTTPException(status_code=401, detail="Authentication failed")
+#     return {"User": user}
 
 
 @app.get("/cookie-jwt-validation",status_code=status.HTTP_200_OK)
@@ -80,14 +81,4 @@ async def cookie(user: user_cookie_dependancy):
         raise HTTPException(status_code=401, detail="Authentication failed")
     return {"User": user}
 
-@app.get("/hello")
-async def root():
-    return {"message" : "Hello World"}
-
-
-
-
-@app.get("/user/{id}")
-async def getUser(id: int,id2: int):
-    return id + id2
 

@@ -23,3 +23,20 @@ def create_user(db: Session, userModel: models.User):
     db.refresh(userModel)
 
 
+
+def create_user_form(db: Session, form: schemas.FormCreate, user_id: int):
+    db_item = models.Form(**form.dict(), owner_id=user_id)
+    db.add(db_item)
+    db.commit()
+    db.refresh(db_item)
+
+def get_form_by_id_of_owner(db: Session, user_id: int):
+    skip = 0
+    limit = 100
+    return db.query(models.Form).filter(models.Form.owner_id == user_id).offset(skip).limit(limit).all()
+
+
+
+
+# def get_items(db: Session, skip: int = 0, limit: int = 100):
+#     return db.query(models.Form).offset(skip).limit(limit).all()

@@ -16,6 +16,8 @@ python-jose = "^3.3.0"
 passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 sqlalchemy = "^2.0.23"
 bcrypt = "^4.1.1"
+httpx = "^0.25.2"
+pytest = "^7.4.3"
 
 
 [build-system]

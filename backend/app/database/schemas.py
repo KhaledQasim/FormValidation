@@ -3,6 +3,27 @@ from typing import Annotated
 from pydantic import BaseModel, Field
 from fastapi import Query
 
+
+
+
+
+class FormBase(BaseModel):
+    form: str
+
+
+class FormCreate(FormBase):
+    pass
+    
+class Form(FormBase):
+    id: int
+    owner_id: int
+    
+    
+    class ConfigDict:
+        from_attributes = True
+        
+        
+        
 # The common attributes of UserCreate and User class go here to avoid duplication
 class UserBase(BaseModel):
     # the "= ..." tells fastapi and pydantic that this is a required field
@@ -19,8 +40,8 @@ class User(UserBase):
     username: str
     email: str
     disabled: bool
-
-    class Config:
+    form: list[Form] = []
+    class ConfigDict:
         # orm_mode is now deprecated in favor of from_attributes
         # orm_mode = True
         from_attributes = True
