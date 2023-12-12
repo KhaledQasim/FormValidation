@@ -82,3 +82,6 @@ async def cookie(user: user_cookie_dependancy):
     return {"User": user}
 
 
+@app.get("/status",status_code=status.HTTP_200_OK)
+def isOnline():
+    return True

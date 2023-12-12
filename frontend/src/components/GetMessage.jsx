@@ -8,12 +8,12 @@ const message = signal("Loading...");
 
 effect(()=>{
     
-    axios.get(backend_url+"hello")
-    .then((res) => {
-        message.value = res.data.message;
+    axios.get(backend_url+"status")
+    .then(() => {
+        message.value = "backend is online"
     })
     .catch((err) => {
-        message.value = "error check log";
+        message.value = "Backend is offline";
         console.log(err);
     })
     ;
@@ -22,7 +22,7 @@ effect(()=>{
 function GetMessage() {
   return (
     <>
-      <h1>Message: {message.value + ", Backend is up and running!"}</h1>
+      <h1>Message: {message.value }</h1>
     </>
   );
 }

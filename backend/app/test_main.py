@@ -19,3 +19,8 @@ def test_cookie_invalid():
         cookies={"jwt": "invalid"},)
     assert response.status_code == 401   
     
+def test_isOnline():
+    response = clint.get(
+        "/status"
+    )
+    assert response.status_code == 200

@@ -103,3 +103,9 @@ async def create_user_form(form: schemas.FormCreate, db: Session = Depends(get_d
         return {"message": "Form created successfully"}
     except:
         raise HTTPException(status_code=401, detail="Unauthorized")
+    
+    
+    
+@router.get("/form-hello",status_code=status.HTTP_200_OK)
+def auth_hello():
+    return "ok"
