@@ -2,21 +2,17 @@ import xImage from "../assets/red-x-icon.svg";
 import tick from "../assets/green-tick.svg";
 import { useState } from "react";
 
-
-
-
 function Form() {
-
   //Form Values
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [dob, setDob] = useState('');
-  const [address, setAddress] = useState('');
-  const [postcode, setPostcode] = useState('');
-  const [company, setCompany] = useState('');
-  const [nationality, setNationality] = useState('');
-  const [jsonFile, setJsonFile] = useState('');
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [dob, setDob] = useState("");
+  const [address, setAddress] = useState("");
+  const [postcode, setPostcode] = useState("");
+  const [company, setCompany] = useState("");
+  const [nationality, setNationality] = useState("");
+  const [jsonFile, setJsonFile] = useState("");
 
   //Valid Text Divs - Off by default
   const [validFirstName, setValidFirstName] = useState(false);
@@ -42,111 +38,114 @@ function Form() {
 
   //Regex/Tests
   const validateName = new RegExp("^[a-z ,.'\\-]{1,20}$", "i"); // 20 characters maximum. Letters and some special characters allowed. Case-insensitive.
-  const validateNumber = new RegExp("^(?:\\+?44|0)(?:\\s?\\d{4}|\\s\\d{3}\\s\\d{3}|\\s\\d{4}\\s\\d{4}|\\d{10})$"); // Uk Phone Number format
-  const validateAddress = new RegExp("[A-Za-z0-9'\.\-\s\,]{1,100}$") //100 characters maximum, letters, numbers, and some special characters allowed. 
-  const validatePostcode = new RegExp("[A-Za-z]{1,2}\\d[A-Za-z\\d]?\\s?\\d[A-Za-z]{2}") // UK Post Code Format
+  const validateNumber = new RegExp(
+    "^(?:\\+?44|0)(?:\\s?\\d{4}|\\s\\d{3}\\s\\d{3}|\\s\\d{4}\\s\\d{4}|\\d{10})$"
+  ); // Uk Phone Number format
+  const validateAddress = new RegExp("[A-Za-z0-9'.-s,]{1,100}$"); //100 characters maximum, letters, numbers, and some special characters allowed.
+  const validatePostcode = new RegExp(
+    "[A-Za-z]{1,2}\\d[A-Za-z\\d]?\\s?\\d[A-Za-z]{2}"
+  ); // UK Post Code Format
   const validateCompany = new RegExp("^\\w[\\w.\\-#&\\s]{1,50}$", "i"); // 50 characters maximum. Letters and some special characters allowed. Case-insensitive.
-  const validateNationality = new RegExp("English|Scottish|Welsh|Northern Irish") // Selection must be one of the four options
+  const validateNationality = new RegExp(
+    "English|Scottish|Welsh|Northern Irish"
+  ); // Selection must be one of the four options
 
   // Check DOB is between allowed range
   function validateDate(date) {
-    
-    const min = new Date('1910-01-01');
-    const max = new Date('2010-01-01');
-    const dob = Date.parse(date)
+    const min = new Date("1910-01-01");
+    const max = new Date("2010-01-01");
+    const dob = Date.parse(date);
 
     if (min < dob && dob < max) {
-      return true
-    } 
+      return true;
+    }
   }
 
   // Check file is a .json
   function validateJson(filePath) {
-    const fileExtension = filePath.split(".").pop()
+    const fileExtension = filePath.split(".").pop();
 
     if (fileExtension === "json") {
-      return true
+      return true;
     }
   }
 
   // Run tests & Update Valid/Invald text onclick
 
   function validate() {
-    
     if (validateName.test(firstName)) {
-      setValidFirstName(true)
-      setInvalidFirstName(false)
+      setValidFirstName(true);
+      setInvalidFirstName(false);
     } else {
-      setValidFirstName(false)
-      setInvalidFirstName(true)
+      setValidFirstName(false);
+      setInvalidFirstName(true);
     }
 
     if (validateName.test(lastName)) {
-      setValidLastName(true)
-      setInvalidLastName(false)
+      setValidLastName(true);
+      setInvalidLastName(false);
     } else {
-      setValidLastName(false)
-      setInvalidLastName(true)
+      setValidLastName(false);
+      setInvalidLastName(true);
     }
 
     if (validateNumber.test(phoneNumber)) {
-      setValidPhoneNumber(true)
-      setInvalidPhoneNumber(false)
+      setValidPhoneNumber(true);
+      setInvalidPhoneNumber(false);
     } else {
-      setValidPhoneNumber(false)
-      setInvalidPhoneNumber(true)
-    }
-    
-    if(validateDate(dob)) {
-      setValidDob(true)
-      setInvalidDob(false)
-    } else {
-      setValidDob(false)
-      setInvalidDob(true)
+      setValidPhoneNumber(false);
+      setInvalidPhoneNumber(true);
     }
 
-    if(validateAddress.test(address)) {
-      setValidAddress(true)
-      setInvalidAddress(false)
+    if (validateDate(dob)) {
+      setValidDob(true);
+      setInvalidDob(false);
     } else {
-      setValidAddress(false)
-      setInvalidAddress(true)
+      setValidDob(false);
+      setInvalidDob(true);
     }
 
-    if(validatePostcode.test(postcode)) {
-      setValidPostcode(true)
-      setInvalidPostcode(false)
+    if (validateAddress.test(address)) {
+      setValidAddress(true);
+      setInvalidAddress(false);
     } else {
-      setValidPostcode(false)
-      setInvalidPostcode(true)
+      setValidAddress(false);
+      setInvalidAddress(true);
+    }
+
+    if (validatePostcode.test(postcode)) {
+      setValidPostcode(true);
+      setInvalidPostcode(false);
+    } else {
+      setValidPostcode(false);
+      setInvalidPostcode(true);
     }
 
     if (validateCompany.test(company)) {
-      setValidCompany(true)
-      setInvalidCompany(false)
+      setValidCompany(true);
+      setInvalidCompany(false);
     } else {
-      setValidCompany(false)
-      setInvalidCompany(true)
+      setValidCompany(false);
+      setInvalidCompany(true);
     }
 
     if (validateNationality.test(nationality)) {
-      setValidNationality(true)
-      setInvalidNationality(false)
+      setValidNationality(true);
+      setInvalidNationality(false);
     } else {
-      setValidNationality(false)
-      setInvalidNationality(true)
+      setValidNationality(false);
+      setInvalidNationality(true);
     }
 
     if (validateJson(jsonFile)) {
-      setValidJsonFile(true)
-      setInvalidJsonFile(false)
+      setValidJsonFile(true);
+      setInvalidJsonFile(false);
     } else {
-      setValidJsonFile(false)
-      setInvalidJsonFile(true)
+      setValidJsonFile(false);
+      setInvalidJsonFile(true);
     }
-
   }
-  
+
   //HTML FORM
   return (
     <>
@@ -158,117 +157,121 @@ function Form() {
       <div className="container w-3/5 mx-auto">
         <form action="" method="POST">
           <div className="grid grid-cols-3 grid-flow-row">
-          
-          {/* First Name Input */}
-          <div className="flex flex-col items-center gap-2 py-2"> 
-            <label htmlFor="firstName">First Name</label> 
-            <input 
-            type="text" 
-            name="firstName" 
-            required
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-            className="input input-bordered input-info w-full max-w-xs" 
-            onClick={validate}
-            />
-          </div>
-
-          {/* Last Name Input */}
-          <div className="flex flex-col items-center gap-2 py-2">
-            <label htmlFor="lastName">Last Name</label> 
-            <input 
-            type="text" 
-            name="lastName"
-            required
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-            className="input input-bordered input-info w-full max-w-xs " 
-            onClick={validate}
-            />
-          </div>
-                  
-          {/* UK Phone Number Input */}
-          <div className="flex flex-col items-center gap-2 py-2">
-            <label htmlFor="phoneNumber">Phone Number</label>
-            <input 
-            type="text" 
-            name="phoneNumber"
-            required
-            value={phoneNumber}
-            onChange={(e) => setPhoneNumber(e.target.value)}
-            className="input input-bordered input-info w-full max-w-xs" 
-            onClick={validate}
-            />
-          </div>
-
-          {/* Date of Birth Input */}
-          <div className="flex flex-col items-center gap-2 py-2">
-            <label htmlFor="dob">Date of Birth</label>
-            <input 
-            type="date" 
-            name="dob"
-            min={"01/01/1900"}
-            max={"01/01/2010"} 
-            required
-            value={dob}
-            onChange={(e) => setDob(e.target.value)}
-            className="input input-bordered input-info w-full max-w-xs" 
-            onClick={validate}
-            />
-          </div>
-
-          {/* UK Address Input */}
-          <div className="flex flex-col items-center gap-2 py-2">
-            <label htmlFor="address">Address</label>
-            <input 
-            type="text"
-            name="address" 
-            required
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-            className="input input-bordered input-info w-full max-w-xs" 
-            onClick={validate}
-            />
-          </div>
-
-          {/* UK Post Code Input */}
-          <div className="flex flex-col items-center gap-2 py-2">
-            <label htmlFor="postCode">Post Code</label>
-            <input 
-            type="text" 
-            name="postCode"
-            required
-            value={postcode}
-            onChange={(e) => setPostcode(e.target.value)}
-            className="input input-bordered input-info w-full max-w-xs" 
-            onClick={validate}
-            />
+            {/* First Name Input */}
+            <div className="flex flex-col items-center gap-2 py-2">
+              <label htmlFor="firstName">First Name</label>
+              <input
+                type="text"
+                name="firstName"
+                required
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                className="input input-bordered input-info w-full max-w-xs"
+                onClick={validate}
+              />
             </div>
 
-          {/* Company Input */}
-          <div className="flex flex-col items-center gap-2 py-2">
-            <label htmlFor="company">Company</label>
-            <input 
-            type="text" 
-            name="company" 
-            required
-            value={company}
-            onChange={(e) => setCompany(e.target.value)}
-            className="input input-bordered input-info w-full max-w-xs" 
-            onClick={validate}
-            />
+            {/* Last Name Input */}
+            <div className="flex flex-col items-center gap-2 py-2">
+              <label htmlFor="lastName">Last Name</label>
+              <input
+                type="text"
+                name="lastName"
+                required
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                className="input input-bordered input-info w-full max-w-xs "
+                onClick={validate}
+              />
             </div>
 
-          {/* UK Nationality Input */}
-          <div className="flex flex-col items-center gap-2 py-2">
-            <label htmlFor="nationality">Nationality</label>
-            <select value={nationality} onChange={(e) => setNationality(e.target.value)} name="nationality" className="select select-info w-full max-w-xs onClick={validate}">
-              <option selected>Select Nationality</option>
-              <option>English</option>
-              <option>Scottish</option>
-              <option>Welsh</option>
-              <option>Northern Irish</option>
-            </select>
+            {/* UK Phone Number Input */}
+            <div className="flex flex-col items-center gap-2 py-2">
+              <label htmlFor="phoneNumber">Phone Number</label>
+              <input
+                type="text"
+                name="phoneNumber"
+                required
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
+                className="input input-bordered input-info w-full max-w-xs"
+                onClick={validate}
+              />
+            </div>
+
+            {/* Date of Birth Input */}
+            <div className="flex flex-col items-center gap-2 py-2">
+              <label htmlFor="dob">Date of Birth</label>
+              <input
+                type="date"
+                name="dob"
+                min={"01/01/1900"}
+                max={"01/01/2010"}
+                required
+                value={dob}
+                onChange={(e) => setDob(e.target.value)}
+                className="input input-bordered input-info w-full max-w-xs"
+                onClick={validate}
+              />
+            </div>
+
+            {/* UK Address Input */}
+            <div className="flex flex-col items-center gap-2 py-2">
+              <label htmlFor="address">Address</label>
+              <input
+                type="text"
+                name="address"
+                required
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                className="input input-bordered input-info w-full max-w-xs"
+                onClick={validate}
+              />
+            </div>
+
+            {/* UK Post Code Input */}
+            <div className="flex flex-col items-center gap-2 py-2">
+              <label htmlFor="postCode">Post Code</label>
+              <input
+                type="text"
+                name="postCode"
+                required
+                value={postcode}
+                onChange={(e) => setPostcode(e.target.value)}
+                className="input input-bordered input-info w-full max-w-xs"
+                onClick={validate}
+              />
+            </div>
+
+            {/* Company Input */}
+            <div className="flex flex-col items-center gap-2 py-2">
+              <label htmlFor="company">Company</label>
+              <input
+                type="text"
+                name="company"
+                required
+                value={company}
+                onChange={(e) => setCompany(e.target.value)}
+                className="input input-bordered input-info w-full max-w-xs"
+                onClick={validate}
+              />
+            </div>
+
+            {/* UK Nationality Input */}
+            <div className="flex flex-col items-center gap-2 py-2">
+              <label htmlFor="nationality">Nationality</label>
+              <select
+                value={nationality}
+                onChange={(e) => setNationality(e.target.value)}
+                name="nationality"
+                className="select select-info w-full max-w-xs onClick={validate}"
+              >
+                <option selected>Select Nationality</option>
+                <option>English</option>
+                <option>Scottish</option>
+                <option>Welsh</option>
+                <option>Northern Irish</option>
+              </select>
             </div>
 
             {/* UK Nationality Input */}
@@ -288,24 +291,31 @@ function Form() {
               </select>
             </div>
 
-          {/* JSON File Input */}
-          <div className="flex flex-col items-center gap-2 py-2">
-            <label htmlFor="nationality">Medical Record JSON</label>
-            <input 
-            type="file" 
-            name="jsonFile"
-            required
-            value={jsonFile}
-            onChange={(e) => setJsonFile(e.target.value)}
-            className="file-input file-input-bordered file-input-info w-full max-w-xs" 
-            onClick={validate}
-            />
-          </div>
+            {/* JSON File Input */}
+            <div className="flex flex-col items-center gap-2 py-2">
+              <label htmlFor="nationality">Medical Record JSON</label>
+              <input
+                type="file"
+                name="jsonFile"
+                required
+                value={jsonFile}
+                onChange={(e) => setJsonFile(e.target.value)}
+                className="file-input file-input-bordered file-input-info w-full max-w-xs"
+                onClick={validate}
+              />
+            </div>
 
-          <br></br>
+            <br></br>
 
-          <div className="flex flex-col items-center">
-            <button onClick={validate} name="submit" className="content-center btn btn-xs sm:btn-sm md:btn-md lg:btn-lg">Submit</button>
+            <div className="flex flex-col items-center">
+              <button
+                onClick={validate}
+                name="submit"
+                className="content-center btn btn-xs sm:btn-sm md:btn-md lg:btn-lg"
+              >
+                Submit
+              </button>
+            </div>
           </div>
         </form>
       </div>
@@ -314,105 +324,157 @@ function Form() {
 
       <div className="flex flex-col">
         <div className="flex flex-row gap-20 justify-center">
-          
           {/* VALID TEXT OBJECTS */}
           <div>
+            {validFirstName && (
+              <div className="flex flex-row gap-2 pt-1">
+                <img src={tick} className="object w-4 h-auto"></img>
+                <p className="text-success text-xs font-bold">
+                  Valid First Name
+                </p>
+              </div>
+            )}
 
-          {validFirstName &&  <div className="flex flex-row gap-2 pt-1">
-              <img src={tick} className="object w-4 h-auto"></img>
-              <p className="text-success text-xs font-bold">Valid First Name</p>       
-            </div> }
+            {validLastName && (
+              <div className="flex flex-row gap-2 pt-1">
+                <img src={tick} className="object w-4 h-auto"></img>
+                <p className="text-success text-xs font-bold">
+                  Valid Last Name
+                </p>
+              </div>
+            )}
 
-            {validLastName &&  <div className="flex flex-row gap-2 pt-1">
-              <img src={tick} className="object w-4 h-auto"></img>
-              <p className="text-success text-xs font-bold">Valid Last Name</p> 
-            </div> }
+            {validPhoneNumber && (
+              <div className="flex flex-row gap-2 pt-1">
+                <img src={tick} className="object w-4 h-auto"></img>
+                <p className="text-success text-xs font-bold">
+                  Valid Phone Number
+                </p>
+              </div>
+            )}
 
-            {validPhoneNumber &&  <div className="flex flex-row gap-2 pt-1">
-              <img src={tick} className="object w-4 h-auto"></img>
-              <p className="text-success text-xs font-bold">Valid Phone Number</p>
-            </div> }
+            {validDob && (
+              <div className="flex flex-row gap-2 pt-1">
+                <img src={tick} className="object w-4 h-auto"></img>
+                <p className="text-success text-xs font-bold">
+                  Valid Date of Birth
+                </p>
+              </div>
+            )}
 
-            {validDob && <div className="flex flex-row gap-2 pt-1">
-              <img src={tick} className="object w-4 h-auto"></img>
-              <p className="text-success text-xs font-bold">Valid Date of Birth</p>
-            </div> }
+            {validAddress && (
+              <div className="flex flex-row gap-2 pt-1 ">
+                <img src={tick} className="object w-4 h-auto"></img>
+                <p className="text-success text-xs font-bold">Valid Address</p>
+              </div>
+            )}
 
-            {validAddress && <div className="flex flex-row gap-2 pt-1 ">
-              <img src={tick} className="object w-4 h-auto"></img>
-              <p className="text-success text-xs font-bold">Valid Address</p>
-            </div> }
+            {validPostcode && (
+              <div className="flex flex-row gap-2 pt-1">
+                <img src={tick} className="object w-4 h-auto"></img>
+                <p className="text-success text-xs font-bold">Valid Postcode</p>
+              </div>
+            )}
 
-            {validPostcode && <div className="flex flex-row gap-2 pt-1">
-              <img src={tick} className="object w-4 h-auto"></img>
-              <p className="text-success text-xs font-bold">Valid Postcode</p>
-            </div> }
+            {validCompany && (
+              <div className="flex flex-row gap-2 pt-1">
+                <img src={tick} className="object w-4 h-auto"></img>
+                <p className="text-success text-xs font-bold">Valid Company</p>
+              </div>
+            )}
 
-            {validCompany && <div className="flex flex-row gap-2 pt-1">
-              <img src={tick} className="object w-4 h-auto"></img>
-              <p className="text-success text-xs font-bold">Valid Company</p>
-            </div>}
+            {validNationality && (
+              <div className="flex flex-row gap-2 pt-1">
+                <img src={tick} className="object w-4 h-auto"></img>
+                <p className="text-success text-xs font-bold">
+                  Valid Nationality
+                </p>
+              </div>
+            )}
 
-            {validNationality && <div className="flex flex-row gap-2 pt-1">
-              <img src={tick} className="object w-4 h-auto"></img>
-              <p className="text-success text-xs font-bold">Valid Nationality</p>
-            </div>}
-
-            {validJsonFile && <div className="flex flex-row gap-2 pt-1">
-              <img src={tick} className="object w-4 h-auto"></img>
-              <p className="text-success text-xs font-bold">Valid File</p>
-            </div>}
-
+            {validJsonFile && (
+              <div className="flex flex-row gap-2 pt-1">
+                <img src={tick} className="object w-4 h-auto"></img>
+                <p className="text-success text-xs font-bold">Valid File</p>
+              </div>
+            )}
           </div>
 
-        {/* INVALID TEXT OBJECTS */}
-        <div>
+          {/* INVALID TEXT OBJECTS */}
+          <div>
+            {invalidFirstName && (
+              <div className="flex flex-row gap-2 pt-1">
+                <img src={xImage} className="object w-4 h-auto"></img>
+                <p className="text-error text-xs font-bold">
+                  Invalid First Name
+                </p>
+              </div>
+            )}
 
-          {invalidFirstName && <div className="flex flex-row gap-2 pt-1">
-            <img src={xImage} className="object w-4 h-auto"></img>
-            <p className="text-error text-xs font-bold">Invalid First Name</p>
-          </div> }
+            {invalidLastName && (
+              <div className="flex flex-row gap-2 pt-1">
+                <img src={xImage} className="object w-4 h-auto"></img>
+                <p className="text-error text-xs font-bold">
+                  Invalid Last Name
+                </p>
+              </div>
+            )}
 
-          {invalidLastName && <div className="flex flex-row gap-2 pt-1">
-            <img src={xImage} className="object w-4 h-auto"></img>
-            <p className="text-error text-xs font-bold">Invalid Last Name</p> 
-          </div>}
+            {invalidPhoneNumber && (
+              <div className="flex flex-row gap-2 pt-1">
+                <img src={xImage} className="object w-4 h-auto"></img>
+                <p className="text-error text-xs font-bold">
+                  Invalid Phone Number
+                </p>
+              </div>
+            )}
 
-          {invalidPhoneNumber && <div className="flex flex-row gap-2 pt-1">
-            <img src={xImage} className="object w-4 h-auto"></img>
-            <p className="text-error text-xs font-bold">Invalid Phone Number</p>
-          </div>}
- 
-          {invalidDob && <div className="flex flex-row gap-2 pt-1">
-            <img src={xImage} className="object w-4 h-auto"></img>
-            <p className="text-error text-xs font-bold">Invalid Date of Birth</p>
-          </div>}
+            {invalidDob && (
+              <div className="flex flex-row gap-2 pt-1">
+                <img src={xImage} className="object w-4 h-auto"></img>
+                <p className="text-error text-xs font-bold">
+                  Invalid Date of Birth
+                </p>
+              </div>
+            )}
 
-          {invalidAddress && <div className="flex flex-row gap-2 pt-1">
-            <img src={xImage} className="object w-4 h-auto"></img>
-            <p className="text-error text-xs font-bold">Invalid Address</p>
-          </div>}
+            {invalidAddress && (
+              <div className="flex flex-row gap-2 pt-1">
+                <img src={xImage} className="object w-4 h-auto"></img>
+                <p className="text-error text-xs font-bold">Invalid Address</p>
+              </div>
+            )}
 
-          {invalidPostcode && <div className="flex flex-row gap-2 pt-1">
-            <img src={xImage} className="object w-4 h-auto"></img>
-            <p className="text-error text-xs font-bold">Invalid Postcode</p>
-          </div>}
+            {invalidPostcode && (
+              <div className="flex flex-row gap-2 pt-1">
+                <img src={xImage} className="object w-4 h-auto"></img>
+                <p className="text-error text-xs font-bold">Invalid Postcode</p>
+              </div>
+            )}
 
-          {invalidCompany && <div className="flex flex-row gap-2 pt-1">
-            <img src={xImage} className="object w-4 h-auto"></img>
-            <p className="text-error text-xs font-bold">Invalid Company</p>
-          </div>}
+            {invalidCompany && (
+              <div className="flex flex-row gap-2 pt-1">
+                <img src={xImage} className="object w-4 h-auto"></img>
+                <p className="text-error text-xs font-bold">Invalid Company</p>
+              </div>
+            )}
 
-          {invalidNationality && <div className="flex flex-row gap-2 pt-1">
-            <img src={xImage} className="object w-4 h-auto"></img>
-            <p className="text-error text-xs font-bold">Invalid Nationality</p>
-          </div>}
+            {invalidNationality && (
+              <div className="flex flex-row gap-2 pt-1">
+                <img src={xImage} className="object w-4 h-auto"></img>
+                <p className="text-error text-xs font-bold">
+                  Invalid Nationality
+                </p>
+              </div>
+            )}
 
-          {invalidJsonFile && <div className="flex flex-row gap-2 pt-1">
-            <img src={xImage} className="object w-4 h-auto"></img>
-            <p className="text-error text-xs font-bold">Invalid File</p>
-          </div>}
-
+            {invalidJsonFile && (
+              <div className="flex flex-row gap-2 pt-1">
+                <img src={xImage} className="object w-4 h-auto"></img>
+                <p className="text-error text-xs font-bold">Invalid File</p>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
