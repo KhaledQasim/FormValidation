@@ -36,6 +36,9 @@ function Form() {
   const [invalidNationality, setInvalidNationality] = useState(true);
   const [invalidJsonFile, setInvalidJsonFile] = useState(true);
 
+  //Register Button - Off by default
+  const [submitButton, setSubmitButton] = useState(false);
+
   //Regex/Tests
   const validateName = new RegExp("^[a-z ,.'\\-]{1,20}$", "i"); // 20 characters maximum. Letters and some special characters allowed. Case-insensitive.
   const validateNumber = new RegExp(
@@ -68,6 +71,11 @@ function Form() {
     if (fileExtension === "json") {
       return true;
     }
+  }
+
+  function submit() {
+    console.log("Connect to backend")
+    
   }
 
   // Run tests & Update Valid/Invald text onclick
@@ -144,6 +152,16 @@ function Form() {
       setValidJsonFile(false);
       setInvalidJsonFile(true);
     }
+
+    // If all tests are passed, show submit button
+    if (validateName.test(firstName) && validateName.test(lastName) && validateNumber.test(phoneNumber) && 
+    validateDate(dob) && validateAddress.test(address) && validatePostcode.test(postcode) && validateCompany.test(company) 
+    && validateNationality.test(nationality) && validateJson(jsonFile)) {
+      setSubmitButton(true)
+    } else {
+      setSubmitButton(false)
+    }
+
   }
 
   //HTML FORM
@@ -155,7 +173,7 @@ function Form() {
       </h1>
 
       <div className="container w-3/5 mx-auto">
-        <form action="" method="POST">
+        <form onSubmit={submit}>
           <div className="grid grid-cols-3 grid-flow-row">
             {/* First Name Input */}
             <div className="flex flex-col items-center gap-2 py-2">
@@ -164,6 +182,7 @@ function Form() {
                 type="text"
                 name="firstName"
                 required
+                placeholder="John"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
                 className="input input-bordered input-info w-full max-w-xs"
@@ -178,6 +197,7 @@ function Form() {
                 type="text"
                 name="lastName"
                 required
+                placeholder="Smith"
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
                 className="input input-bordered input-info w-full max-w-xs "
@@ -192,6 +212,7 @@ function Form() {
                 type="text"
                 name="phoneNumber"
                 required
+                placeholder="07823123123"
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
                 className="input input-bordered input-info w-full max-w-xs"
@@ -222,6 +243,7 @@ function Form() {
                 type="text"
                 name="address"
                 required
+                placeholder="House Name, Street Name"
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
                 className="input input-bordered input-info w-full max-w-xs"
@@ -236,6 +258,7 @@ function Form() {
                 type="text"
                 name="postCode"
                 required
+                placeholder="B4 7ET"
                 value={postcode}
                 onChange={(e) => setPostcode(e.target.value)}
                 className="input input-bordered input-info w-full max-w-xs"
@@ -250,6 +273,7 @@ function Form() {
                 type="text"
                 name="company"
                 required
+                placeholder="Student"
                 value={company}
                 onChange={(e) => setCompany(e.target.value)}
                 className="input input-bordered input-info w-full max-w-xs"
@@ -257,38 +281,16 @@ function Form() {
               />
             </div>
 
-            {/* UK Nationality Input */}
-            <div className="flex flex-col items-center gap-2 py-2">
-              <label htmlFor="nationality">Nationality</label>
-              <select
-                value={nationality}
-                onChange={(e) => setNationality(e.target.value)}
-                name="nationality"
-                className="select select-info w-full max-w-xs onClick={validate}"
-              >
-                <option selected>Select Nationality</option>
-                <option>English</option>
-                <option>Scottish</option>
-                <option>Welsh</option>
-                <option>Northern Irish</option>
-              </select>
-            </div>
-
-            {/* UK Nationality Input */}
-            <div className="flex flex-col items-center gap-2 py-2">
-              <label htmlFor="nationality">Nationality</label>
-              <select
-                name="nationality"
-                className="select select-info w-full max-w-xs"
-              >
-                <option disabled selected>
-                  Select Nationality
-                </option>
-                <option>English</option>
-                <option>Scottish</option>
-                <option>Welsh</option>
-                <option>Northern Irish</option>
-              </select>
+          {/* UK Nationality Input */}
+          <div className="flex flex-col items-center gap-2 py-2">
+            <label htmlFor="nationality">Nationality</label>
+            <select value={nationality} onChange={(e) => setNationality(e.target.value)} name="nationality" className="select select-info w-full max-w-xs onClick={validate}">
+              <option selected>Select Nationality</option>
+              <option>English</option>
+              <option>Scottish</option>
+              <option>Welsh</option>
+              <option>Northern Irish</option>
+            </select>
             </div>
 
             {/* JSON File Input */}
@@ -306,16 +308,18 @@ function Form() {
             </div>
 
             <br></br>
+            <br></br>
 
-            <div className="flex flex-col items-center">
-              <button
-                onClick={validate}
+            {submitButton && (<div className="flex flex-col items-center">
+            <br></br>
+               <button
                 name="submit"
                 className="content-center btn btn-xs sm:btn-sm md:btn-md lg:btn-lg"
               >
                 Submit
               </button>
-            </div>
+            </div>)}
+
           </div>
         </form>
       </div>
