@@ -12,7 +12,6 @@ function Form() {
   const [postcode, setPostcode] = useState("");
   const [company, setCompany] = useState("");
   const [nationality, setNationality] = useState("");
-  const [jsonFile, setJsonFile] = useState("");
 
   //Valid Text Divs - Off by default
   const [validFirstName, setValidFirstName] = useState(false);
@@ -64,19 +63,35 @@ function Form() {
     }
   }
 
-  // Check file is a .json
-  function validateJson(filePath) {
-    const fileExtension = filePath.split(".").pop();
+  // Handle change of JSON File
+  function handleFileChange(event) {
+    const file = event.target.files[0];
+    const reader = new FileReader();
 
-    if (fileExtension === "json") {
-      return true;
+    reader.onload = (e) => {
+      const content = e.target.result;
+      validateJSON(content);
+    };
+
+    reader.onerror = () => {
+      setValidJsonFile(false);
+      setInvalidJsonFile(true);
+    };
+
+    reader.readAsText(file);
+  };
+  
+  // Validate JSON file syntax
+  function validateJSON (content) {
+    try {
+      JSON.parse(content);
+      setValidJsonFile(true);
+      setInvalidJsonFile(false);
+    } catch (error) {
+      setValidJsonFile(false);
+      setInvalidJsonFile(true);
     }
-  }
-
-  function submit() {
-    console.log("Connect to backend")
-    
-  }
+  };
 
   // Run tests & Update Valid/Invald text onclick
 
@@ -145,23 +160,20 @@ function Form() {
       setInvalidNationality(true);
     }
 
-    if (validateJson(jsonFile)) {
-      setValidJsonFile(true);
-      setInvalidJsonFile(false);
-    } else {
-      setValidJsonFile(false);
-      setInvalidJsonFile(true);
-    }
-
     // If all tests are passed, show submit button
     if (validateName.test(firstName) && validateName.test(lastName) && validateNumber.test(phoneNumber) && 
     validateDate(dob) && validateAddress.test(address) && validatePostcode.test(postcode) && validateCompany.test(company) 
-    && validateNationality.test(nationality) && validateJson(jsonFile)) {
+    && validateNationality.test(nationality) && validJsonFile) {
       setSubmitButton(true)
     } else {
       setSubmitButton(false)
     }
 
+  }
+
+  // On form submission
+  function submitForm() {
+    console.log("To do backend")
   }
 
   //HTML FORM
@@ -173,7 +185,7 @@ function Form() {
       </h1>
 
       <div className="container w-3/5 mx-auto">
-        <form onSubmit={submit}>
+        <form onSubmit={submitForm}>
           <div className="grid grid-cols-3 grid-flow-row">
             {/* First Name Input */}
             <div className="flex flex-col items-center gap-2 py-2">
@@ -300,8 +312,7 @@ function Form() {
                 type="file"
                 name="jsonFile"
                 required
-                value={jsonFile}
-                onChange={(e) => setJsonFile(e.target.value)}
+                onChange={handleFileChange}
                 className="file-input file-input-bordered file-input-info w-full max-w-xs"
                 onClick={validate}
               />
@@ -481,7 +492,6 @@ function Form() {
           </div>
         </div>
       </div>
-
       <br></br>
       <br></br>
     </>
