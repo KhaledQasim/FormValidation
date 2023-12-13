@@ -8,6 +8,7 @@ import NotFound from "./pages/NotFound.jsx";
 import Registration from "./pages/Registration.jsx";
 import Login from "./pages/Login.jsx";
 import Form from "./components/Form.jsx";
+import UserForms from "./pages/UserForms.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -16,6 +17,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/" element={<Layout />}>
           <Route index element={<App />} />
           <Route path="/form" element={<Form />} />
+          <Route path="/user-forms" element={<UserForms/>}/>
           <Route path="/register" element={<Registration />} />
           <Route path="/login" element={<Login />} />
           <Route path="*" element={<NotFound />} />

@@ -38,7 +38,7 @@ db_dependancy = Annotated[Session, Depends(get_db)]
 
 
 
-def get_current_user_from_jwt_cookie(jwt: str = Cookie(None)):
+def get_current_user_id_from_jwt_cookie(jwt: str = Cookie(None)):
     try:
         if not jwt:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
@@ -71,7 +71,7 @@ async def get_forms(jwt: str = Cookie(None), db: Session = Depends(get_db)):
         forms (form): the forms that belong to the user
     """
     try:
-        user = get_current_user_from_jwt_cookie(jwt)
+        user = get_current_user_id_from_jwt_cookie(jwt)
         
         forms = crud.get_form_by_id_of_owner(
             db, user_id=user)
@@ -98,7 +98,7 @@ async def create_user_form(form: schemas.FormCreate, db: Session = Depends(get_d
         _type_: _description_
     """
     try:
-        user = get_current_user_from_jwt_cookie(jwt)
+        user = get_current_user_id_from_jwt_cookie(jwt)
         crud.create_user_form(db=db, form=form, user_id=user)
         return {"message": "Form created successfully"}
     except:
@@ -106,6 +106,3 @@ async def create_user_form(form: schemas.FormCreate, db: Session = Depends(get_d
     
     
     
-@router.get("/form-hello",status_code=status.HTTP_200_OK)
-def auth_hello():
-    return "ok"

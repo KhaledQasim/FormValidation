@@ -25,7 +25,7 @@ def create_user(db: Session, userModel: models.User):
 
 
 def create_user_form(db: Session, form: schemas.FormCreate, user_id: int):
-    db_item = models.Form(**form.dict(), owner_id=user_id)
+    db_item = models.Form(**form.model_dump(), owner_id=user_id)
     db.add(db_item)
     db.commit()
     db.refresh(db_item)

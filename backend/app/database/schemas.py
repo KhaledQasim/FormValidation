@@ -32,7 +32,8 @@ class UserBase(BaseModel):
 
 # Password is provided here since this is the only class that will not be returned by our API (we don't want to return the password)
 class UserCreate(UserBase):
-    password: Annotated[str , Query(min_length=8,max_length=22,pattern=("^[a-zA-Z\d][a-zA-Z\d!?%&*]{7,21}$"))] = ...
+    #TODO add password regex
+    password: Annotated[str , Query(min_length=8,max_length=30,)] = ...
 
 # Here we are returning data from the database, so we can now include the other attributes e.g id
 class User(UserBase):

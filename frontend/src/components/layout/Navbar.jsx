@@ -1,17 +1,13 @@
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { theme } from "../../helper/theme.jsx";
 
-
-import { logged , userData } from "../../helper/logged.jsx";
-import { effect } from "@preact/signals-react";
-
-
+import { logged, userData } from "../../helper/logged.jsx";
+import { logout } from "../../helper/logout.jsx";
 
 function setTheme(themeInput) {
   localStorage.setItem("theme", themeInput);
   theme.value = themeInput;
 }
-
 
 function Navbar() {
   // const [user] = useAtom(loggedUser);
@@ -19,16 +15,35 @@ function Navbar() {
   return (
     <div className="navbar bg-base-100">
       <div className="navbar-start">
-        
-        <NavLink className="btn btn-ghost text-xl" to="/">Medical Census</NavLink>
+        <NavLink className="btn btn-ghost text-xl" to="/">
+          Medical Census
+        </NavLink>
       </div>
       <div className="navbar-center lg:flex">
         <ul className="menu menu-horizontal px-1">
           {logged.value ? (
-            <div>Welcome {userData.value.username}</div>
+            <>
+              <li>
+                <span>Welcome {userData.value.username}</span>
+              </li>
+              <li>
+                <NavLink className="button" to="/form">
+                  Create Form
+                </NavLink>
+              </li>
+              <li>
+                <NavLink className="button" to="/user-forms">
+                  View Previous Forms
+                </NavLink>
+              </li>
+              <li>
+                <Link className="button" onClick={()=>logout()} to="/">
+                  LogOut
+                </Link>
+              </li>
+            </>
           ) : (
             <>
-              
               <li>
                 <NavLink className="button" to="/login">
                   Login

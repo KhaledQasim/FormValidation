@@ -2,7 +2,7 @@ from fastapi.testclient import TestClient
 from .routers.auth import create_access_token
 from .main import app 
 from datetime import timedelta
-import warnings
+
 
 clint = TestClient(app)
 

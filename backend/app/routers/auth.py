@@ -138,6 +138,13 @@ async def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm,
     # return {"access_token": token, "token_type": "bearer"}
 
 
+@router.get("/logout")
+async def login_for_access_token():
+    content = {"message": "JWT cookie removed"}
+    response = JSONResponse(content=content)
+    response.delete_cookie(key="jwt")
+    return response
+
 
 
 def authenticate_user(db, username: str, password: str):

@@ -1,7 +1,8 @@
-import { signal, effect } from "@preact/signals-react";
+import { signal } from "@preact/signals-react";
 import axios from "axios";
 import qs from "qs";
 import { useNavigate } from "react-router-dom";
+import { userUpdate } from "../helper/logged";
 
 
 const username = signal("");
@@ -41,7 +42,7 @@ function Registration() {
             .then((res) => {
               if (res.status === 200) {
                 console.log("user logged in");
-               
+                userUpdate();
                 navigate("/");
               } else {
                 console.log("error in user login after registration");

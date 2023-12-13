@@ -3,7 +3,7 @@ import axios from "axios";
 import qs from "qs";
 import { useNavigate } from "react-router-dom";
 // import { LoggedUser } from "../helper/LoggedUser";
-import { logged , userData , userUpdate} from "../helper/logged";
+import { userUpdate } from "../helper/logged";
 
 
 const username = signal("");
