@@ -11,7 +11,6 @@ function Form() {
 
   //Form Values
   const json_file = signal();
-  const [jsonFile, setJsonFile] = useState();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");

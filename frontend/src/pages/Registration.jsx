@@ -131,7 +131,7 @@ function Registration() {
             Must contain at least 1 digit 0-9
           </span>
           <span className="label-text-alt ">
-            Must be between 8-22 characters long
+            Must be between 8-30 characters long
           </span>
         </div>
       </label>
