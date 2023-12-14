@@ -30,12 +30,7 @@ function Login() {
     axios(options)
       .then((res) => {
         if (res.status === 200) {
-          console.log("user logged in");
-
-          //   console.log(userData.value);
-          //   logged.value = true;
           userUpdate();
-          //   setUser(true);
           navigate("/");
         }
       })

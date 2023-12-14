@@ -17,7 +17,7 @@ function viewUsersForms() {
           emptyUserForms.value = false;
         }
         userForms.value = res.data;
-        console.log(userForms.value);
+       
       }
     })
     .catch((err) => {
