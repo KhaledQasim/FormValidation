@@ -47,7 +47,16 @@ Then run to start the server.
 ```
 npm run dev
 ```
-.
+Then in a different terminal run this command
+
+```
+npx tailwindcss -i ./src/index.css -o ./dist/output.css --watch
+```
+Now the Front-end site should be running at 
+
+```
+http://localhost:5173/
+```
 
 # Test Users 
 
