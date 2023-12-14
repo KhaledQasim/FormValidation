@@ -77,7 +77,8 @@ async def get_forms(jwt: str = Cookie(None), db: Session = Depends(get_db)):
             db, user_id=user)
         return forms
     
-    except:
+    except Exception as e:
+        print(e)
         raise HTTPException(status_code=401, detail="Unauthorized")   
 
 
@@ -101,7 +102,8 @@ async def create_user_form(form: schemas.FormCreate, db: Session = Depends(get_d
         user = get_current_user_id_from_jwt_cookie(jwt)
         crud.create_user_form(db=db, form=form, user_id=user)
         return {"message": "Form created successfully"}
-    except:
+    except Exception as e:
+        print(e)
         raise HTTPException(status_code=401, detail="Unauthorized")
     
     

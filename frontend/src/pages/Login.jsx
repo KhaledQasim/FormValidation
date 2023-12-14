@@ -5,15 +5,17 @@ import { useNavigate } from "react-router-dom";
 // import { LoggedUser } from "../helper/LoggedUser";
 import { userUpdate } from "../helper/logged";
 
-
+const message = signal("");
 const username = signal("");
 const password = signal("");
+const loading = signal("btn btn-primary");
 const backend_url = import.meta.env.VITE_BACKEND_URL;
 
 function Login() {
- 
   function submit(e) {
     e.preventDefault();
+    loading.value = "btn btn-disabled";
+    loading.value = true;
     const form = {
       username: username.value,
       password: password.value,
@@ -30,8 +32,8 @@ function Login() {
         if (res.status === 200) {
           console.log("user logged in");
 
-        //   console.log(userData.value);
-        //   logged.value = true;
+          //   console.log(userData.value);
+          //   logged.value = true;
           userUpdate();
           //   setUser(true);
           navigate("/");
@@ -39,6 +41,8 @@ function Login() {
       })
       .catch((err) => {
         console.log(err, "error in axios post to login user");
+        message.value = err.response.data.detail;
+        loading.value = "btn btn-primary";
       });
   }
   const navigate = useNavigate();
@@ -53,17 +57,17 @@ function Login() {
           onChange={(e) => {
             username.value = e.target.value;
           }}
+          required
           type="text"
           placeholder="Username Or Email"
           className="input input-bordered input-primary w-full max-w-xs"
         />
-        <div className="label grid grid-cols-1">
-        
-        </div>
+        <div className="label grid grid-cols-1"></div>
       </label>
 
       <label className="form-control w-full max-w-xs">
         <input
+          required
           type="password"
           placeholder="Password"
           className="input input-bordered input-primary w-full max-w-xs"
@@ -72,13 +76,12 @@ function Login() {
             password.value = e.target.value;
           }}
         />
-        <div className="label grid grid-cols-1">
-          
-        </div>
+        <div className="label grid grid-cols-1"></div>
       </label>
-      <button type="submit" className="btn btn-primary">
+      <button type="submit" className={loading.value}>
         Login
       </button>
+      <div className="text-red-600">{message.value}</div>
     </form>
   );
 }

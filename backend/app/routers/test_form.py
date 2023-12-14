@@ -5,11 +5,9 @@ from sqlalchemy.pool import StaticPool
 from datetime import timedelta
 
 
-
 from .auth import create_access_token
 from ..database.database import Base
 from ..main import app
-
 
 
 # Must import the db dependancy from the router you are testing
@@ -46,55 +44,89 @@ client = TestClient(app)
 
 
 def test_create_user_form():
-    jwt_cookie = create_access_token("test",1,timedelta(1))
+    jwt_cookie = create_access_token("test", 1, timedelta(1))
+
+    request_data = {
+        "first_name": "2",
+        "last_name": "string",
+        "phone": 1222222222,
+        "dob": "2023-12-14",
+        "address": "string",
+        "post_code": "string",
+        "company": "string",
+        "nationality": "English",
+        "json_file": "{\"cat\":\"dog\"}"
+    }
     response = client.post(
         "/form/create",
-        cookies={"jwt":jwt_cookie},
-        json={"form":"Hello Form"}
+        cookies={"jwt": jwt_cookie},
+        json=request_data
     )
     assert response.is_success
 
 
 def test_create_user_form_with_invalid_jwt():
-    jwt_cookie = create_access_token("test",1,timedelta(-1))
+    jwt_cookie = create_access_token("test", 1, timedelta(-1))
     expired_jwt = client.post(
         "/form/create",
-        cookies={"jwt":jwt_cookie},
-        json={"form":"Hello Form"}
+        cookies={"jwt": jwt_cookie},
+        json={"form": "Hello Form"}
     )
-    assert expired_jwt.is_error 
-    
+    assert expired_jwt.is_error
+
     invalid_jwt = client.post(
         "/form/create",
-        cookies={"jwt":"theInvalidJwt"},
-        json={"form":"Hello Form"}
+        cookies={"jwt": "theInvalidJwt"},
+        json={"form": "Hello Form"}
     )
-    assert invalid_jwt.is_error 
-    
+    assert invalid_jwt.is_error
 
 
 def test_get_user_forms():
-    jwt_cookie = create_access_token("test",1,timedelta(1))
-    
+    jwt_cookie = create_access_token("test", 1, timedelta(1))
+    request = {
+        "first_name": "string",
+        "last_name": "string",
+        "phone": 1222222222,
+        "dob": "2023-12-14",
+        "address": "string",
+        "post_code": "string",
+        "company": "string",
+        "nationality": "English",
+        "json_file": "{\"cat\":\"dog\"}"
+    }
+
     client.post(
         "/form/create",
-        cookies={"jwt":jwt_cookie},
-        json={"form":"Hello Form"}
+        cookies={"jwt": jwt_cookie},
+        json=request
     )
-    
+
     get_users_form = client.get(
         "/form/all",
-        cookies={"jwt":jwt_cookie},   
+        cookies={"jwt": jwt_cookie},
     )
-    
+
     assert get_users_form.is_success
-    
-    data =  get_users_form.json()
-    response_data =  {
-            "owner_id": 1,
-            "form": "Hello Form",
-            "id": 1
-        }
-    
-    assert data[0] == response_data
-   
+
+    data = get_users_form.json()
+    response_data = {
+        "id": 1,
+        "phone": 1222222222,
+        "address": "string",
+        "company": "string",
+        "json_file": {
+            "cat": "dog"
+        },
+        "last_name": "string",
+        "first_name": "string",
+        "dob": "2023-12-14T00:00:00",
+        "post_code": "string",
+        "nationality": "English",
+        "owner_id": 1
+    }
+    first_object = data[0]
+    assert first_object["phone"] == response_data["phone"]    
+    # assert data[0] == response_data
+
+

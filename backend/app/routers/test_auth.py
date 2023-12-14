@@ -224,3 +224,62 @@ def test_create_user_with_wrong_email_syntax():
 #               "password": "TestTestTest1", "username": "test5"},
 #     )
 #     assert password_with_no_special.is_error
+
+
+
+
+
+
+
+
+
+
+
+
+
+def test_create_user_with_wrong_password_syntax():
+
+    password_too_short = client.post(
+        "/auth",
+        json={"email": "test@test.com","password": "1Test?", "username": "test"},
+    )
+    assert password_too_short.is_error
+
+    # password below is 31 characters long
+    password_too_long = client.post(
+        "/auth",
+        json={"email": "test1@test.com",
+              "password": "12345Test?321231231321314124124", "username": "test1"},
+    )
+    assert password_too_long.is_error
+
+
+
+    password_with_no_lowerCase = client.post(
+        "/auth",
+        json={"email": "test2@test.com","password": "12345TEST?", "username": "test2"},
+    )
+    assert password_with_no_lowerCase.is_error
+
+
+
+    password_with_no_upperCase = client.post(
+        "/auth",
+        json={"email": "test3@test.com",
+              "password": "12345test?", "username": "test3"},
+    )
+    assert password_with_no_upperCase.is_error
+
+    password_with_no_number = client.post(
+        "/auth",
+        json={"email": "test4@test.com",
+              "password": "TestTestTest?", "username": "test4"},
+    )
+    assert password_with_no_number.is_error
+
+    password_with_no_special = client.post(
+        "/auth",
+        json={"email": "test5@test.com",
+              "password": "TestTestTest1", "username": "test5"},
+    )
+    assert password_with_no_special.is_error

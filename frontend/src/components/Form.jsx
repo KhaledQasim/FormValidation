@@ -1,9 +1,17 @@
 import xImage from "../assets/red-x-icon.svg";
 import tick from "../assets/green-tick.svg";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { signal } from "@preact/signals-react";
+const backend_url = import.meta.env.VITE_BACKEND_URL;
 
 function Form() {
+  const navigate = useNavigate();
+
   //Form Values
+  const json_file = signal();
+  const [jsonFile, setJsonFile] = useState();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -41,7 +49,7 @@ function Form() {
   //Regex/Tests
   const validateName = new RegExp("^[a-z ,.'\\-]{1,20}$", "i"); // 20 characters maximum. Letters and some special characters allowed. Case-insensitive.
   const validateNumber = new RegExp(
-    "^(?:\\+?44|0)(?:\\s?\\d{4}|\\s\\d{3}\\s\\d{3}|\\s\\d{4}\\s\\d{4}|\\d{10})$"
+    "^(?:\\d{4}|\\s\\d{3}\\s\\d{3}|\\s\\d{4}\\s\\d{4}|\\d{10})$"
   ); // Uk Phone Number format
   const validateAddress = new RegExp("[A-Za-z0-9'.-s,]{1,100}$"); //100 characters maximum, letters, numbers, and some special characters allowed.
   const validatePostcode = new RegExp(
@@ -63,35 +71,41 @@ function Form() {
     }
   }
 
-  // Handle change of JSON File
-  function handleFileChange(event) {
-    const file = event.target.files[0];
-    const reader = new FileReader();
-
-    reader.onload = (e) => {
-      const content = e.target.result;
-      validateJSON(content);
+  // Handle change of JSON File#
+  const handleFileChange = (e) => {
+    const fileReader = new FileReader();
+    fileReader.readAsText(e.target.files[0], "UTF-8");
+    fileReader.onload = (e) => {
+      try {
+        JSON.parse(e.target.result);
+        setValidJsonFile(true);
+        setInvalidJsonFile(false);
+        json_file.value = e.target.result;
+      } catch (err) {
+        setValidJsonFile(false);
+        setInvalidJsonFile(true);
+      }
     };
-
-    reader.onerror = () => {
-      setValidJsonFile(false);
-      setInvalidJsonFile(true);
-    };
-
-    reader.readAsText(file);
   };
-  
-  // Validate JSON file syntax
-  function validateJSON (content) {
-    try {
-      JSON.parse(content);
-      setValidJsonFile(true);
-      setInvalidJsonFile(false);
-    } catch (error) {
-      setValidJsonFile(false);
-      setInvalidJsonFile(true);
-    }
-  };
+  // function handleFileChange(event) {
+  //   const file = event.target.files[0];
+
+  //     const reader = new FileReader();
+  //     reader.onload = (e) => {
+  //       try {
+  //         const jsonContent = JSON.parse(e.target.result);
+  //         json_file.value = jsonContent;
+  //         setValidJsonFile(true);
+  //         setInvalidJsonFile(false);
+  //       } catch (error) {
+  //         console.error("Error parsing JSON file: ", error);
+  //         setValidJsonFile(false);
+  //         setInvalidJsonFile(true);
+  //       }
+  //     reader.readAsText(file);
+  //     };
+
+  //  }
 
   // Run tests & Update Valid/Invald text onclick
 
@@ -161,19 +175,56 @@ function Form() {
     }
 
     // If all tests are passed, show submit button
-    if (validateName.test(firstName) && validateName.test(lastName) && validateNumber.test(phoneNumber) && 
-    validateDate(dob) && validateAddress.test(address) && validatePostcode.test(postcode) && validateCompany.test(company) 
-    && validateNationality.test(nationality) && validJsonFile) {
-      setSubmitButton(true)
+    if (
+      validateName.test(firstName) &&
+      validateName.test(lastName) &&
+      validateNumber.test(phoneNumber) &&
+      validateDate(dob) &&
+      validateAddress.test(address) &&
+      validatePostcode.test(postcode) &&
+      validateCompany.test(company) &&
+      validateNationality.test(nationality) &&
+      validJsonFile
+    ) {
+      setSubmitButton(true);
     } else {
-      setSubmitButton(false)
+      setSubmitButton(false);
     }
-
   }
 
   // On form submission
-  function submitForm() {
-    console.log("To do backend")
+  function submitForm(e) {
+    e.preventDefault();
+    // console.log(json_file.value)
+    console.log(JSON.stringify(JSON.stringify(JSON.parse(json_file.value))));
+    // console.log(json_file.value))
+    const request_data = {
+      first_name: firstName,
+      last_name: lastName,
+      phone: phoneNumber,
+      dob: dob,
+      address: address,
+      post_code: postcode,
+      company: company,
+      nationality: nationality,
+      json_file: json_file.value,
+    }
+    axios.post(
+      backend_url+"form/create",
+      request_data,
+      { withCredentials: true }
+    ).then((res) => {
+      if (res.status === 200) {
+        console.log("form created");
+        navigate("/user-forms");
+        window.location.reload();
+      } else {
+        console.log("error in form submission syntax");
+
+      }
+    }).catch((err) => {
+      console.log(err, "error in axios post to create form");
+    });
   }
 
   //HTML FORM
@@ -181,11 +232,12 @@ function Form() {
     <>
       <h1 className="p-5 font-bold w-full text-center">
         {" "}
-        Please Register Below{" "}
+        Please Register Below - if stuck click inside a different input field to
+        validate input, also select the json file twice over if submit button is not working{" "}
       </h1>
 
       <div className="container w-3/5 mx-auto">
-        <form onSubmit={submitForm}>
+        <form onSubmit={(e) => submitForm(e)}>
           <div className="grid grid-cols-3 grid-flow-row">
             {/* First Name Input */}
             <div className="flex flex-col items-center gap-2 py-2">
@@ -219,7 +271,7 @@ function Form() {
 
             {/* UK Phone Number Input */}
             <div className="flex flex-col items-center gap-2 py-2">
-              <label htmlFor="phoneNumber">Phone Number</label>
+              <label htmlFor="phoneNumber">Phone Number 10 digits long</label>
               <input
                 type="text"
                 name="phoneNumber"
@@ -234,7 +286,7 @@ function Form() {
 
             {/* Date of Birth Input */}
             <div className="flex flex-col items-center gap-2 py-2">
-              <label htmlFor="dob">Date of Birth</label>
+              <label htmlFor="dob">Date of Birth,year 2009 or below</label>
               <input
                 type="date"
                 name="dob"
@@ -265,7 +317,7 @@ function Form() {
 
             {/* UK Post Code Input */}
             <div className="flex flex-col items-center gap-2 py-2">
-              <label htmlFor="postCode">Post Code</label>
+              <label htmlFor="postCode">UK Format Post Code</label>
               <input
                 type="text"
                 name="postCode"
@@ -293,16 +345,20 @@ function Form() {
               />
             </div>
 
-          {/* UK Nationality Input */}
-          <div className="flex flex-col items-center gap-2 py-2">
-            <label htmlFor="nationality">Nationality</label>
-            <select value={nationality} onChange={(e) => setNationality(e.target.value)} name="nationality" className="select select-info w-full max-w-xs onClick={validate}">
-              <option selected>Select Nationality</option>
-              <option>English</option>
-              <option>Scottish</option>
-              <option>Welsh</option>
-              <option>Northern Irish</option>
-            </select>
+            {/* UK Nationality Input */}
+            <div className="flex flex-col items-center gap-2 py-2">
+              <label htmlFor="nationality">Nationality</label>
+              <select
+                value={nationality}
+                onChange={(e) => setNationality(e.target.value)}
+                name="nationality"
+                className="select select-info w-full max-w-xs onClick={validate}"
+              >
+                <option defaultValue={"Select Nationality"}></option>
+                <option>English</option>
+                <option>Scottish</option>
+                <option>Welsh</option>
+              </select>
             </div>
 
             {/* JSON File Input */}
@@ -321,16 +377,17 @@ function Form() {
             <br></br>
             <br></br>
 
-            {submitButton && (<div className="flex flex-col items-center">
-            <br></br>
-               <button
-                name="submit"
-                className="content-center btn btn-xs sm:btn-sm md:btn-md lg:btn-lg"
-              >
-                Submit
-              </button>
-            </div>)}
-
+            {submitButton && (
+              <div className="flex flex-col items-center">
+                <br></br>
+                <button
+                  name="submit"
+                  className="content-center btn btn-xs btn-secondary sm:btn-sm md:btn-md lg:btn-lg"
+                >
+                  Submit
+                </button>
+              </div>
+            )}
           </div>
         </form>
       </div>

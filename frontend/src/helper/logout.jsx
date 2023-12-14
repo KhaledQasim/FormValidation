@@ -11,10 +11,12 @@ function logout() {
   axios
     .get(backend_url + "auth/logout", { withCredentials: true })
     .then((res) => {
-      if (res.status === 200) {
+      if (res.status === 200 ) {
         logged.value = false;
         localStorage.setItem("logged","false")
-        location.reload()
+        window.location.href = "/";
+        window.location.reload();
+        
       }
     });
   logged.value = false;

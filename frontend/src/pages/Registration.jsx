@@ -10,6 +10,7 @@ const email = signal("");
 const password = signal("");
 const backend_url = import.meta.env.VITE_BACKEND_URL;
 const LoginBackendUrl = backend_url + "auth/token";
+const message = signal("");
 
 function Registration() {
   const navigate = useNavigate();
@@ -46,17 +47,22 @@ function Registration() {
                 navigate("/");
               } else {
                 console.log("error in user login after registration");
+                message.value = "You provided one or more fields wrong, please try again"
               }
             })
             .catch((err) => {
+              message.value = "You provided one or more fields wrong, please try again"
               console.log(err, "error in axios post to login user");
             });
         } else {
           console.log("error in user submission syntax");
           console.log(res.data);
+          message.value = "You provided one or more fields wrong, please try again"
+          
         }
       })
       .catch((err) => {
+        message.value = "You provided one or more fields wrong, please try again"
         console.log(err, "error in axios post to register user");
       });
   }
@@ -67,6 +73,7 @@ function Registration() {
     >
       <label className="form-control w-full max-w-xs ml-4">
         <input
+          required
           value={username.value}
           onChange={(e) => {
             username.value = e.target.value;
@@ -86,6 +93,7 @@ function Registration() {
       </label>
       <label className="form-control w-full max-w-xs">
         <input
+          required
           type="email"
           placeholder="Email"
           className="input input-bordered input-primary w-full max-w-xs"
@@ -95,11 +103,12 @@ function Registration() {
           }}
         />
         <div className="label grid grid-cols-1">
-          <span className="label-text-alt ">Must be between check backend</span>
+          
         </div>
       </label>
       <label className="form-control w-full max-w-xs">
         <input
+          required
           type="password"
           placeholder="Password"
           className="input input-bordered input-primary w-full max-w-xs"
@@ -116,7 +125,7 @@ function Registration() {
             Must contain at least 1 Upper case letter
           </span>
           <span className="label-text-alt ">
-            Must contain at least 1 special character of !?%&*
+            Must contain at least 1 special character of !£$%^&*-_+=:;@~#?
           </span>
           <span className="label-text-alt ">
             Must contain at least 1 digit 0-9
@@ -129,6 +138,7 @@ function Registration() {
       <button type="submit" className="btn btn-primary">
         Register
       </button>
+      <div className="text-red-600 text-2xl">{message.value}</div>
     </form>
   );
 }

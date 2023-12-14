@@ -1,5 +1,8 @@
 import { signal, effect } from "@preact/signals-react";
 import axios from "axios";
+import { logout } from "./logout";
+
+
 const logged = signal("");
 const backend_url = import.meta.env.VITE_BACKEND_URL;
 const userData = signal({
@@ -32,6 +35,7 @@ function userUpdate() {
       } else {
         logged.value = false;
         localStorage.setItem("logged", false);
+        logout();
       }
     })
     .catch((err) => {
@@ -39,6 +43,7 @@ function userUpdate() {
       localStorage.setItem("logged", false);
 
       console.log(err);
+      
     });
 }
 
