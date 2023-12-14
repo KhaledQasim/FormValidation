@@ -79,3 +79,13 @@ password:
 ```
 Password123???
 ```
+
+# Run pyhton unit tests
+
+Please install pytest to run these test.
+Navigate to the backend folder and run
+
+```
+pytest -vv
+```
+
