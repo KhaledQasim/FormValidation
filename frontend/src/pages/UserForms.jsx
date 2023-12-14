@@ -59,7 +59,7 @@ function UserForms() {
               <div>First Name: {item.first_name}</div>
               <div>Last Name: {item.last_name}</div>
               <div>Phone Number: {item.phone}</div>
-              <div>Date of Birth: {item.dob}</div>
+              <div>Date of Birth: {item.dob.split('T')[0]}</div>
               <div>Address: {item.address}</div>
               <div>Post Code: {item.post_code}</div>
               <div>Company: {item.company}</div>
